@@ -6,10 +6,19 @@
 	<link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 	
 </head>
-<body>
+<body ng-app="ClassSignIn">
+
+	<div>
+        <div id="content" ng-view></div>
+    </div>
 	
 </body>
 
-<script type="text/javascript" src="node_modules/angular/angular.js"></script>
 
+
+<script type="text/javascript" src="node_modules/angular/angular.js"></script>
+<script src="/node_modules/angular-route/angular-route.js"></script>
+
+<script type="text/javascript" src="app.js"></script>
+<script type="text/javascript" src="client/controllers/homeCtrl.js"></script>
 </html>
