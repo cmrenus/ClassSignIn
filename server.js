@@ -5,11 +5,20 @@ var path = require('path'),
 	bodyParser = require('body-parser'),
 	express = require('express'),
     port = 8005,
-    app = express();
+    app = express(),
+    mongoConnect = require('./server/mongoConnect'),
+    db;
+
+
+mongoConnect.connect().then(function() {
+    //maybe some additional logic if need by when mongo connects
+    db = mongoConnect.db;
+});
 
 
 //routes
 var routes = require('./server/routes/index');
+var admin = require('./server/routes/admin');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -22,6 +31,7 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "format, Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+
 
 // Set up an Express session, which is required for CASAuthentication.
 app.use(session({
@@ -38,9 +48,13 @@ var cas = new CASAuthentication({
     cas_version: '2.0'
 });
 
+
+//routes
 app.use('/', routes);
+app.use('/admin', admin);
 
 
+//CAS route handlers
 app.get('/login', cas.bounce, function (req, res) {
   	if (!req.session || !req.session.cas_user) {
         res.redirect('/');
