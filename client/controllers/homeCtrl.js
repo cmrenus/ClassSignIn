@@ -14,6 +14,4 @@ angular.module('ClassSignIn')
 			console.log(err);
 		});
 	};
-
-
 }]);
