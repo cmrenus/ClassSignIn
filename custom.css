@@ -1,0 +1,33 @@
+
+.form-text{
+	position:relative;
+	padding: 0 !important;
+	top: 50%; 
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  padding: 2px 6px;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: inherit;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  background: red;
+  cursor: inherit;
+  display: block;
+}
+input[readonly] {
+  background-color: white !important;
+  cursor: text !important;
+  width: 30% !important;
+}
+
+.bottom-spacing{
+  padding-bottom: 2%;
+}

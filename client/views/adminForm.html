@@ -1,3 +1,4 @@
+<div controller="adminCtrl"> 
   <uib-tabset active="active">
     <uib-tab index="0" heading="Set Current Semester">
       
@@ -9,9 +10,38 @@
           <div class="form-group">
             <label class="col-sm-3 control-label form-text">Semester:</label>
             <div class="col-sm-3">
-              <input class="form-control" ng-disabled="edit" type="text" ng-model="class.semester" placeholder="" required >
+              <input class="form-control" type="text" ng-model="class.semester" placeholder="ex. S16, F17" required >
             </div> 
           </div>
+
+          <div class="form-group">
+            <label class="col-sm-3 control-label form-text">Class</label>
+            <div class="col-sm-3">
+              <input class="form-control" type="text" ng-model="class.className" placeholder="" required >
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-3 control-label form-text">TA RCSID </label>
+            <div class="col-sm-3">
+              <input class="form-control" type="text" ng-model="class.TARCS" placeholder="RCS ID" required >
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-3 control-label form-text">Class List</label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <span class="input-group-btn">
+                    <span class="btn btn-primary btn-file">
+                        Browse&hellip; <input type="file" ngf-select ng-model="class.classList" name="file">
+                    </span>
+                </span>
+                <input type="text" ng-model="class.classList.name" readonly>
+              </div>
+            </div>
+          </div>
+
           
         </form>
           <button class="btn btn-success pull-left"  ng-click="submit()" >
@@ -23,15 +53,24 @@
             </button>
           </a>
       </div>
+      
+
     </uib-tab>
     <uib-tab index="2" heading="Add/Delete Student">
+      <label for="semSelect">Please Select a Semester</label><br>
+      <select name="semSelect" id="semSelect" ng-model="semSelect">
+        <option value="">---Please select---</option>
+        <option value="S16">Spring 2016</option>
+      </select>
+      <br>
       <label for="classSelect">Please Select a Class</label><br>
-        <select name="classSelect" id="classSelect" ng-model="classSelect">
-          <option value="">---Please select---</option>
-          <option value="Intro">Intro To IT</option> 
-          <option value="WebSys">Web Systems</option>
-          <option value="WebSci">Web Science</option>
-          <option value="Capstone">Capstone</option>
-        </select>
+      <select name="classSelect" id="classSelect" ng-model="classSelect">
+        <option value="">---Please select---</option>
+        <option value="Intro">Intro To IT</option> 
+        <option value="WebSys">Web Systems</option>
+        <option value="WebSci">Web Science</option>
+        <option value="Capstone">Capstone</option>
+      </select>
     </uib-tab>
   </uib-tabset>
+</div>

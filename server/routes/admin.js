@@ -10,7 +10,10 @@ mongoConnect.connect().then(function(){
 var app = express();
 
 
+router.post("/", function(req, res){
 
+
+});
 
 
 

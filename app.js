@@ -1,4 +1,4 @@
-var app = angular.module('ClassSignIn', ['ngRoute', 'ui.bootstrap']);
+var app = angular.module('ClassSignIn', ['ngRoute', 'ui.bootstrap', 'ngFileUpload']);
 
 app.config(['$routeProvider', function($routeProvider){
 	$routeProvider.
