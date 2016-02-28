@@ -1,4 +1,4 @@
-var app = angular.module('ClassSignIn', ['ngRoute']);
+var app = angular.module('ClassSignIn', ['ngRoute', 'ui.bootstrap']);
 
 app.config(['$routeProvider', function($routeProvider){
 	$routeProvider.
@@ -6,10 +6,10 @@ app.config(['$routeProvider', function($routeProvider){
 		templateUrl: 'client/views/home.html',
 		controller: 'homeCtrl'
 	}).
+	when('/admin',{
+		templateUrl: 'client/views/adminForm.html'
+	}).
 	otherwise({
 		redirectTo:'/'
 	});
-
-
-
 }]);

@@ -62,7 +62,9 @@ app.get('/login', cas.bounce, function (req, res) {
         res.redirect('/');
     }
     console.log(req.session);
-    res.redirect('/');
+    if(req.session.cas_user = "RENUSC"){
+    	res.redirect('/#/admin');
+    }
 });
 
 app.get('/logout', cas.logout);
