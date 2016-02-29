@@ -7,7 +7,8 @@ app.config(['$routeProvider', function($routeProvider){
 		controller: 'homeCtrl'
 	}).
 	when('/admin',{
-		templateUrl: 'client/views/adminForm.html'
+		templateUrl: 'client/views/adminForm.html',
+		controller: 'adminCtrl'
 	}).
 	otherwise({
 		redirectTo:'/'

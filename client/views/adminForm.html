@@ -1,7 +1,11 @@
 <div controller="adminCtrl"> 
   <uib-tabset active="active">
     <uib-tab index="0" heading="Set Current Semester">
-      
+      <label for="currentSemSelect">Select a Semester</label><br>
+      <select name="currentSemSelect" id="currentSemSelect" ng-model="currentSemSelect">
+        <option value="">---Please select---</option>
+        <option value="S16">Spring 2016</option>
+      </select>
     </uib-tab>
     <uib-tab index="1" heading="Add a Class">
       <div class="container">
@@ -17,7 +21,14 @@
           <div class="form-group">
             <label class="col-sm-3 control-label form-text">Class</label>
             <div class="col-sm-3">
-              <input class="form-control" type="text" ng-model="class.className" placeholder="" required >
+              <!--<input class="form-control" type="text" ng-model="class.className" placeholder="" required >-->
+                <select name="className" ng-model="class.className">
+                  <option value="">---Please select---</option>
+                  <option value="Intro">Intro To IT</option> 
+                  <option value="WebSys">Web Systems</option>
+                  <option value="WebSci">Web Science</option>
+                  <option value="Capstone">Capstone</option>
+                </select>
             </div> 
           </div>
 
@@ -44,7 +55,7 @@
 
           
         </form>
-          <button class="btn btn-success pull-left"  ng-click="submit()" >
+          <button class="btn btn-success pull-left"  ng-click="addClass()" >
             <span class="glyphicon glyphicon-save"></span>Submit
           </button>
           <a href="">
@@ -74,3 +85,4 @@
     </uib-tab>
   </uib-tabset>
 </div>
+

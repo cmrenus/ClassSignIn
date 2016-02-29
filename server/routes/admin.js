@@ -10,8 +10,8 @@ mongoConnect.connect().then(function(){
 var app = express();
 
 
-router.post("/", function(req, res){
-
+router.post("/newClass", function(req, res){
+	console.log(req.body);
 
 });
 
