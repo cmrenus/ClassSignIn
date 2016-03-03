@@ -1,11 +1,15 @@
 <div controller="adminCtrl"> 
   <uib-tabset active="active">
     <uib-tab index="0" heading="Set Current Semester">
-      <label for="currentSemSelect">Select a Semester</label><br>
+      <h2>Current Semester: {{currentSem}}</h2>
+      <label for="currentSemSelect">Change Semester</label><br>
       <select ng-show="semesters" name="currentSemSelect" id="currentSemSelect" ng-model="currentSemSelect">
         <option value="">---Please select---</option>
         <option ng-repeat="semester in semesters" value="{{semester}}">{{semester}}</option>
       </select>
+      <button class="btn btn-success"  ng-click="changeSem(currentSemSelect)" >
+        <span class="glyphicon glyphicon-save"></span>Submit
+      </button>
     </uib-tab>
     <uib-tab index="1" heading="Add a Class">
       <div class="container">
@@ -14,15 +18,14 @@
           <div class="form-group">
             <label class="col-sm-3 control-label form-text">Semester:</label>
             <div class="col-sm-3">
-              <input class="form-control" type="text" ng-model="class.semester" placeholder="ex. S16, F17" required >
+              <input class="form-control" type="text" ng-model="newClass.semester" placeholder="ex. S16, F17" required >
             </div>
           </div>
 
           <div class="form-group">
             <label class="col-sm-3 control-label form-text">Class</label>
             <div class="col-sm-3">
-              <!--<input class="form-control" type="text" ng-model="class.className" placeholder="" required >-->
-                <select name="className" ng-model="class.className">
+                <select name="className" ng-model="newClass.className">
                   <option value="">---Please select---</option>
                   <option value="Intro">Intro To IT</option> 
                   <option value="WebSys">Web Systems</option>
@@ -35,7 +38,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label form-text">TA RCSID </label>
             <div class="col-sm-3">
-              <input class="form-control" type="text" ng-model="class.TARCS" placeholder="RCS ID" required >
+              <input class="form-control" type="text" ng-model="newClass.TARCS" placeholder="RCS ID" required >
             </div> 
           </div>
 
@@ -45,10 +48,10 @@
               <div class="input-group">
                 <span class="input-group-btn">
                     <span class="btn btn-primary btn-file">
-                        Browse&hellip; <input type="file" ngf-select ng-model="class.classList" name="file">
+                        Browse&hellip; <input type="file" ngf-select ng-model="newClass.classList" name="file">
                     </span>
                 </span>
-                <input type="text" ng-model="class.classList.name" readonly>
+                <input type="text" ng-model="newClass.classList.name" readonly>
               </div>
             </div>
           </div>
@@ -74,13 +77,10 @@
         <option ng-repeat="semester in semesters" value="{{semester}}">{{semester}}</option>
       </select>
       <br>
-      <label for="classSelect">Please Select a Class</label><br>
-      <select name="classSelect" id="classSelect" ng-model="classSelect">
+      <label ng-show="classes" for="classSelect">Please Select a Class</label><br>
+      <select ng-show="classes" name="classSelect" id="classSelect" ng-model="classSelect">
         <option value="">---Please select---</option>
-        <option value="Intro">Intro To IT</option> 
-        <option value="WebSys">Web Systems</option>
-        <option value="WebSci">Web Science</option>
-        <option value="Capstone">Capstone</option>
+        <option ng-repeat="class in classes" value="{{class.className}}">{{class.className}}</option>
       </select>
     </uib-tab>
   </uib-tabset>

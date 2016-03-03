@@ -30,6 +30,30 @@ router.post("/newClass", function(req, res){
 	});
 });
 
+router.post("/changeSemester", function(req, res){
+	console.log(req.body);
+	var collection = db.collection('Current');
+	collection.find().toArray(function(err, docs){
+		if (err) throw err;
+		console.log(docs[0]);
+		collection.updateOne({"_id": docs[0]._id}, {$set: {'semester': req.body.semester}},function(err, docs){
+			console.log(docs);
+		});
+	});
+
+});
+
+
+router.get('/currentSemester', function(req, res){
+	var collection = db.collection('Current');
+	collection.find().toArray(function(err, docs){
+		if (err) throw err;
+		res.send(docs[0].semester);
+	});
+	
+});
+
+
 router.get("/semesters", function(req, res){
 	var collection = db.collection('Classes');
 	collection.distinct('semester', function(err, docs){
@@ -40,7 +64,7 @@ router.get("/semesters", function(req, res){
 
 router.get("/classList", function(req, res){
 	var collection = db.collection('Classes');
-	collection.find({'semester': req.query.semester}, {'className': 1, _id: 0}).toArray(function(err, docs){
+	collection.find({'semester': req.query.semester}, {'className': 1}).toArray(function(err, docs){
 		if(err) throw err;
 		res.send(docs);
 	});

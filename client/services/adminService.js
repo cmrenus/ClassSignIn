@@ -29,4 +29,20 @@ angular.module('ClassSignIn')
 			url: 'admin/classList?semester=' + semester
 		});
 	};
+
+	this.getStudentList = function(classID){
+		return $http({
+			method: 'GET',
+			url: 'admin/studentList?classID=' + classID
+		});
+	};
+
+	this.changeSemester = function(semester){
+		return $http({
+			method: 'POST',
+			url: 'admin/changeSemester',
+			data: {semester: semester}
+		});
+	};
+
 }]);
