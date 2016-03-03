@@ -9,7 +9,7 @@ mongoConnect.connect().then(function(){
 
 var app = express();
 
-
+//Add a new class
 router.post("/newClass", function(req, res){
 	console.log(req.body);
 	var collection = db.collection('Classes');
@@ -30,6 +30,7 @@ router.post("/newClass", function(req, res){
 	});
 });
 
+//change the current semester
 router.post("/changeSemester", function(req, res){
 	console.log(req.body);
 	var collection = db.collection('Current');
@@ -38,12 +39,14 @@ router.post("/changeSemester", function(req, res){
 		console.log(docs[0]);
 		collection.updateOne({"_id": docs[0]._id}, {$set: {'semester': req.body.semester}},function(err, docs){
 			console.log(docs);
+			res.json({'Success': 'Semester Changed'});
+			res.end();
 		});
 	});
 
 });
 
-
+//retrieve the current semester
 router.get('/currentSemester', function(req, res){
 	var collection = db.collection('Current');
 	collection.find().toArray(function(err, docs){
@@ -53,7 +56,7 @@ router.get('/currentSemester', function(req, res){
 	
 });
 
-
+//get list of all semesters
 router.get("/semesters", function(req, res){
 	var collection = db.collection('Classes');
 	collection.distinct('semester', function(err, docs){
@@ -62,6 +65,7 @@ router.get("/semesters", function(req, res){
 	});
 });
 
+//get list of class choices based on semester
 router.get("/classList", function(req, res){
 	var collection = db.collection('Classes');
 	collection.find({'semester': req.query.semester}, {'className': 1}).toArray(function(err, docs){
