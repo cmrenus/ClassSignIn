@@ -6,7 +6,6 @@ angular.module('ClassSignIn')
 		$http({
 			method : 'GET',
 			url: '/login',
-			withCredentials: true,
 			data: {'class' : $scope.classSelect}
 		}).then(function(data){
 			$window.location = 'https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Flocalhost%3A8005%2Flogin&renew=false';

@@ -8,4 +8,25 @@ angular.module('ClassSignIn')
 			url: '/admin/newClass'
 		});
 	};
+
+	this.getSemesters = function(){
+		return $http({
+			method: 'GET',
+			url: '/admin/semesters'
+		});
+	};
+
+	this.getCurrentSemester = function(){
+		return $http({
+			method: 'GET',
+			url: 'admin/currentSemester'
+		});
+	};
+
+	this.getClasses = function(semester){
+		return $http({
+			method: 'GET',
+			url: 'admin/classList?semester=' + semester
+		});
+	};
 }]);
