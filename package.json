@@ -1,5 +1,5 @@
 {
-  "name": "ClassSignIn",
+  "name": "classsignin",
   "version": "0.0.1",
   "description": "Online application to take attendance",
   "main": "index.js",
@@ -7,14 +7,32 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "angular": "^1.5.0",
+    "angular-route": "^1.5.0",
+    "angular-ui-bootstrap": "^1.2.4",
+    "angularjs-geolocation": "^0.1.3",
+    "bluebird": "^3.3.3",
+    "body-parser": "^1.15.0",
+    "bootstrap": "^3.3.6",
+    "cas-authentication": "0.0.8",
+    "cookie-parser": "^1.4.1",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "mongodb": "^2.1.7",
+    "ng-file-upload": "^12.0.1"
   },
   "engines": {
     "node": "5.5.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cmrenus/ClassSignIn"
+    "url": "git+https://github.com/cmrenus/ClassSignIn.git"
   },
   "author": "Chris Renus",
-  "license": "RPI"
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/cmrenus/ClassSignIn/issues"
+  },
+  "homepage": "https://github.com/cmrenus/ClassSignIn#readme",
+  "devDependencies": {}
 }

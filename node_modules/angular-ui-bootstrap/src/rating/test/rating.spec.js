@@ -107,6 +107,7 @@ describe('rating directive', function() {
 
     expect(getState()).toEqual([true, true, false, false, false]);
     expect(element.attr('aria-valuenow')).toBe('2');
+    expect(element.attr('aria-valuetext')).toBe('two');
   });
 
   it('shows different number of icons when `max` attribute is set', function() {
@@ -125,9 +126,9 @@ describe('rating directive', function() {
     expect(element.attr('aria-valuemax')).toBe('15');
   });
 
-  it('handles readonly attribute', function() {
+  it('handles read-only attribute', function() {
     $rootScope.isReadonly = true;
-    element = $compile('<uib-rating ng-model="rate" readonly="isReadonly"></uib-rating>')($rootScope);
+    element = $compile('<uib-rating ng-model="rate" read-only="isReadonly"></uib-rating>')($rootScope);
     $rootScope.$digest();
 
     expect(getState()).toEqual([true, true, true, false, false]);
