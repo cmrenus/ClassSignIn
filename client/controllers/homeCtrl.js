@@ -8,7 +8,7 @@ angular.module('ClassSignIn')
 			url: '/login',
 			data: {'class' : $scope.classSelect}
 		}).then(function(data){
-			$window.location = 'https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Flocalhost%3A8005%2Flogin&renew=false';
+			$window.location = 'https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Flocalhost%3A8005%2F%23%2FsignIn&renew=false';
 			console.log(data);
 		}).catch(function(err){
 			console.log(err);

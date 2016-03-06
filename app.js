@@ -1,4 +1,4 @@
-var app = angular.module('ClassSignIn', ['ngRoute', 'ui.bootstrap', 'ngFileUpload']);
+var app = angular.module('ClassSignIn', ['ngRoute', 'ui.bootstrap', 'ngFileUpload', 'geolocation']);
 
 app.config(['$routeProvider', function($routeProvider){
 	$routeProvider.
@@ -9,6 +9,10 @@ app.config(['$routeProvider', function($routeProvider){
 	when('/admin',{
 		templateUrl: 'client/views/adminForm.html',
 		controller: 'adminCtrl'
+	}).
+	when('/signIn', {
+		templateUrl: 'client/views/studentCheck.html',
+		controller: 'studentCheckCtrl'
 	}).
 	otherwise({
 		redirectTo:'/'
