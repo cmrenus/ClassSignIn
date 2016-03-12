@@ -1,6 +1,7 @@
 var express = require('express'),
 	router = express.Router(),
 	mongoConnect = require('../mongoConnect.js'),
+	mongo = require('mongodb'),
 	db;
 
 mongoConnect.connect().then(function(){
@@ -75,12 +76,13 @@ router.get("/classList", function(req, res){
 });
 
 
-
-
-
-
-
-
+router.get('/studentList', function(req, res){
+	var collection = db.collection('Classes');
+	collection.find({'_id': new mongo.ObjectId(req.query.classID)}, {'classList': 1}).toArray(function(err, docs){
+		if(err) throw err;
+		res.send(docs[0].classList);
+	});
+});
 
 
 

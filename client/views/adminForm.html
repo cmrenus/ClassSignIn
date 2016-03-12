@@ -78,10 +78,30 @@
       </select>
       <br>
       <label ng-show="classes" for="classSelect">Please Select a Class</label><br>
-      <select ng-show="classes" name="classSelect" id="classSelect" ng-model="classSelect">
+      <select ng-show="classes" name="classSelect" id="classSelect" ng-change="getStudents(classSelect)" ng-model="classSelect">
         <option value="">---Please select---</option>
-        <option ng-repeat="class in classes" value="{{class.className}}">{{class.className}}</option>
+        <option ng-repeat="class in classes" value="{{class._id}}">{{class.className}}</option>
       </select>
+      <table ng-show="students" class="table table-striped">
+        <thead><tr>
+          <th>Delete</th>
+          <th>RCS ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+        </tr></thead>
+        <tbody>
+          <tr ng-repeat="student in students">
+            <td>
+              <button class="btn btn-danger" ng-click="deleteModal(user.CEC)">
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </td>
+            <td>{{student.rcs}}</td>
+            <td>{{student.firstName}}</td>
+            <td>{{student.lastName}}</td>
+          </tr>
+        </tbody>
+      </table>
     </uib-tab>
   </uib-tabset>
 </div>

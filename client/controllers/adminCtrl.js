@@ -35,6 +35,16 @@ angular.module('ClassSignIn')
 			console.log(err);
 		});
 	};
+	
+	$scope.getStudents = function(classID){
+		adminService.getStudentList(classID).then(function(res){
+			console.log(res.data);
+			$scope.students = res.data;
+		},
+		function(err){
+			console.log(err);
+		});
+	};
 
 	$scope.changeSem = function(semester){
 		console.log(semester);
