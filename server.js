@@ -58,11 +58,12 @@ app.use('/TA', TA);
 
 //CAS route handlers
 app.get('/login', cas.bounce, function (req, res) {
+    console.log(req.query);
   	if (!req.session || !req.session.cas_user) {
         res.redirect('/');
     }
     console.log(req.session);
-    if(req.session.cas_user = "plo"){
+    if(req.session.cas_user == "RENUSC"){
     	res.redirect('/#/admin');
     }
     else{
