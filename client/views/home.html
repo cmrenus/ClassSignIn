@@ -2,12 +2,9 @@
 	<div class="container">
 		<div class="col-md-6 well col-md-offset-3">
 			<label for="classSelect">Please Select Class to Sign into</label><br>
-		    <select name="classSelect" id="classSelect" ng-model="classSelect">
+		    <select ng-show="classes" name="classSelect" id="classSelect" ng-model="classSelect">
 		      <option value="">---Please select---</option>
-		      <option value="Intro">Intro To IT</option> 
-		      <option value="WebSys">Web Systems</option>
-		      <option value="WebSci">Web Science</option>
-		      <option value="Capstone">Capstone</option>
+		      <option ng-repeat="class in classes" value="{{class._id}}">{{class.className}}</option> 
 		    </select><br><br>
 			<button class="btn btn-lg btn-danger btn-block" ng-click="login()" ng-disabled="!classSelect">
 				<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Sign in
