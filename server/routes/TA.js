@@ -9,25 +9,9 @@ mongoConnect.connect().then(function(){
 
 var app = express();
 
-router.post("/", function(req, res){
-
+router.get("/attendance", function(req, res){
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
