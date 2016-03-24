@@ -1,7 +1,7 @@
 angular.module('ClassSignIn')
-.controller('adminCtrl', ['$scope', '$http', 'Upload', 'adminService', function($scope, $http, upload, adminService) {
+.controller('adminCtrl', ['$scope', '$http', 'Upload', 'adminService', '$uibModal', function($scope, $http, upload, adminService, $modal) {
 	$scope.newClass = {};
-
+	var selectedSemester, selectedClass;
 
 	adminService.getSemesters().then(function(res){
 		$scope.semesters = res.data;
@@ -27,6 +27,7 @@ angular.module('ClassSignIn')
 	};
 
 	$scope.getClasses = function(semester){
+		selectedSemester = semester;
 		adminService.getClasses(semester).then(function(res){
 			console.log(res.data);
 			$scope.classes = res.data;
@@ -37,6 +38,7 @@ angular.module('ClassSignIn')
 	};
 	
 	$scope.getStudents = function(classID){
+		selectedClass = classID;
 		adminService.getStudentList(classID).then(function(res){
 			console.log(res.data);
 			$scope.students = res.data;
@@ -49,6 +51,35 @@ angular.module('ClassSignIn')
 	$scope.changeSem = function(semester){
 		console.log(semester);
 		adminService.changeSemester(semester).then(function(res){
+			console.log(res);
+		},
+		function(err){
+			console.log(err);
+		});
+	};
+
+	$scope.addStudentModal = function () {
+        $scope.alerts = [];
+        $scope.modalInstance = $modal.open({
+          animation: $scope.animationsEnabled,
+          templateUrl: 'client/views/addStudentModal.html',
+          controller: ['$scope', function(scope){
+            //scope.alerts = $scope.alerts;
+            scope.cancel = $scope.cancel;
+            scope.addStudent = $scope.addStudent;
+          }]
+        });
+        $scope.modalInstance.result.then(function (selectedItem) {
+          $scope.selected = selectedItem;
+        });
+    };
+
+    $scope.cancel = function () {
+        $scope.modalInstance.dismiss('cancel');
+    };
+
+   	$scope.addStudent = function(newStudent){
+		adminService.addStudent(newStudent, selectedClass).then(function(res){
 			console.log(res);
 		},
 		function(err){

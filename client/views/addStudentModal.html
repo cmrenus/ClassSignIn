@@ -1,0 +1,32 @@
+<div class="modal-header">
+  <button type="button" class="close" ng-click="cancel()">&times;</button>
+  <h4 class="modal-title">Add Student</h4>
+</div>
+<div class="modal-body">
+  <form name="newStudentForm" class="form-horizontal">
+    <div class="form-group">
+      <label class="col-sm-3 control-label form-text">First Name:</label>
+      <div class="col-sm-9">
+        <input  type="text" ng-model="newStudent.fName" placeholder="First Name" required>
+      </div> 
+    </div> 
+    <div class="form-group">
+      <label class="col-sm-3 control-label form-text">Last Name:</label>
+      <div class="col-sm-9">
+        <input type="text" ng-model="newStudent.lName" placeholder="Last Name" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label form-text">RCSID:</label>
+      <div class="col-sm-9">
+        <input type="text" ng-model="newStudent.RCSID" placeholder="RCSID" name="RCSID" required>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success pull-left"  ng-click="addStudent(newStudent);" ng-disabled="newStudentForm.$invalid">
+    <span class="glyphicon glyphicon-save"></span>Add
+  </button>
+  <button type="button" class="btn btn-default" ng-click="cancel();">Close</button>
+</div>

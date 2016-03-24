@@ -45,4 +45,12 @@ angular.module('ClassSignIn')
 		});
 	};
 
+	this.addStudent = function(student, classID){
+		return $http({
+			method: 'POST',
+			url: 'admin/addStudent',
+			data: {student: student, classID: classID}
+		});
+	};
+
 }]);
