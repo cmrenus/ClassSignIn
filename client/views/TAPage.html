@@ -1,0 +1,13 @@
+
+
+<div class="container-fluid" ng-controller="TACtrl">
+	<pre>Selected date is: <em>{{dt}}</em></pre>
+	<label for="classSelect">Please Select a Class</label><br>
+	<select name="classSelect" id="classSelect" ng-change="getAttendance(classSelect)" ng-model="classSelect">
+		<option value="">---Please select---</option>
+		<option ng-repeat="class in classes" value="{{class._id}}">{{class.className}}</option>
+	</select>
+	<div ng-show="classSelect" style="display:inline-block; min-height:290px;">
+		<uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions"></uib-datepicker>
+	</div>
+</div>

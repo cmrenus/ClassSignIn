@@ -14,6 +14,10 @@ app.config(['$routeProvider', function($routeProvider){
 		templateUrl: 'client/views/studentCheck.html',
 		controller: 'studentCheckCtrl'
 	}).
+	when('/TA', {
+		templateUrl: 'client/views/TAPage.html',
+		controller: 'TACtrl'
+	}).
 	otherwise({
 		redirectTo:'/'
 	});
