@@ -53,7 +53,7 @@ var cas = new CASAuthentication({
 //routes
 app.use('/', routes);
 app.use('/admin', admin);
-app.use('/TA', TA);
+app.use('/attendance', TA);
 
 
 //CAS route handlers

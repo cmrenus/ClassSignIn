@@ -3,7 +3,6 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
 	
 	adminService.getCurrentSemester().then(function(res){
 		adminService.getClasses(res.data).then(function(res){
-			console.log(res.data);
 			$scope.classes = res.data;
 		},
 		function(err){
@@ -94,12 +93,30 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
     return '';
   }
 
-  getAttendance = function(classID){
-  	adminService.attendance(date, classID).then(function(res){
+  $scope.$watchGroup(['dt', 'classSelect'], function(newValues, oldValues){
+  	if($scope.classSelect != undefined){
+  		getAttendanceByDate(newValues[0], newValues[1]);
+  	}
+  });
+
+  getAttendanceByDate = function(date, classID){
+  	adminService.getAttendanceByDate(date, classID).then(function(res){
   		console.log(res);
+  		$scope.classList = res.data.classList;
+  		$scope.inClass = res.data.inClass;
   	},
   	function(err){
   		console.log(err);
   	});
   };
+
+  checkAttendance = function(student){
+  	return true;
+  	/*if($scope.inClass.map(function(e){return e.rcs}).indexOf(student.rcs)){
+  	 	return true;
+  	}
+  	else
+  		return false;
+*/
+  }
 }]);

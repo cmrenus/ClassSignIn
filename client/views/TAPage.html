@@ -1,14 +1,34 @@
 
 
 <div class="container-fluid" ng-controller="TACtrl">
-	<pre>Selected date is: <em>{{dt}}</em></pre>
-	<label for="classSelect">Please Select a Class</label><br>
-	<select name="classSelect" id="classSelect" ng-change="getAttendance(classSelect)" ng-model="classSelect">
-		<option value="">---Please select---</option>
-		<option ng-repeat="class in classes" value="{{class._id}}">{{class.className}}</option>
-	</select>
-	<h4>Calender</h4>
-	<div ng-show="classSelect" style="display:inline-block; min-height:290px;">
-		<uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions"></uib-datepicker>
+	<div class="col-md-6">
+		<!--<pre>Selected date is: <em>{{dt}}</em></pre>-->
+		<label for="classSelect">Please Select a Class</label><br>
+		<select name="classSelect" id="classSelect" ng-model="classSelect">
+			<option value="">---Please select---</option>
+			<option ng-repeat="class in classes" value="{{class._id}}">{{class.className}}</option>
+		</select>
+		<h4>Calender</h4>
+		<div ng-show="classSelect" style="display:inline-block; min-height:290px;">
+			<uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions" ng-change="getAttendanceByDate(classSelect)"></uib-datepicker>
+		</div>
+	</div>
+	<div ng-show="classList" class="col-md-6">
+		<table class="table table-striped">
+	        <thead><tr>
+	          <th>Last</th>
+	          <th>First</th>
+	          <th>RCS</th>
+	          <th>Present</th>
+	        </tr></thead>
+	        <tbody>
+	          <tr ng-repeat="student in classList">
+	            <td>{{student.lastName}}</td>
+	          	<td>{{student.firstName}}</td>
+	          	<td>{{student.rcs}}</td>
+	            <td ng-show="checkAttendance(student)">Here</td>
+	          </tr>
+	        </tbody>
+	    </table>
 	</div>
 </div>

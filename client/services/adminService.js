@@ -53,4 +53,11 @@ angular.module('ClassSignIn')
 		});
 	};
 
+	this.getAttendanceByDate = function(date, classID){
+		return $http({
+			method: 'GET',
+			url: 'attendance/byDate?date=' + date + '&classID='+classID
+		});
+	};
+
 }]);
