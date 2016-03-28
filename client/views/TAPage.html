@@ -13,8 +13,8 @@
 			<uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions" ng-change="getAttendanceByDate(classSelect)"></uib-datepicker>
 		</div>
 	</div>
-	<div ng-show="classList" class="col-md-6">
-		<table class="table table-striped">
+	<div class="col-md-6">
+		<table ng-show="classList" class="table table-striped">
 	        <thead><tr>
 	          <th>Last</th>
 	          <th>First</th>
@@ -26,9 +26,13 @@
 	            <td>{{student.lastName}}</td>
 	          	<td>{{student.firstName}}</td>
 	          	<td>{{student.rcs}}</td>
-	            <td ng-show="checkAttendance(student)">Here</td>
+	            <td ng-switch="{{student.present}}">
+	            	<img ng-switch-when="true" width="20px" ng-src="resources/images/greenCheck.png">
+					<img ng-switch-when="undefined" width="20px" ng-src="resources/images/redCross.png">
+	            </td>
 	          </tr>
 	        </tbody>
 	    </table>
+	    <h2 ng-show="noAttendance" ng-model="noAttendance">{{noAttendance}}</h2>
 	</div>
 </div>

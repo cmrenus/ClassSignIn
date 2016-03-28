@@ -94,6 +94,17 @@ router.get('/studentList', function(req, res){
 });
 
 
+router.delete('/deleteStudent', function(req, res){
+	var collection = db.collection('Classes');
+	console.log(req.query);
+	collection.update({'_id': new mongo.ObjectId(req.query.classID)}, {$pull: {classList: {rcs: req.query.rcs}}}, function(err){
+		if(err) throw err;
+		res.send(req.query.rcs + ' Removed');
+	});
+
+});
+
+
 
 
 

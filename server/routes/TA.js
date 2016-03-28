@@ -3,6 +3,7 @@ var express = require('express'),
 	dateFormat = require('dateformat'),
 	mongoConnect = require('../mongoConnect.js'),
 	mongo = require('mongodb'),
+	q = require('q'),
 	db;
 
 dateFormat.masks.format = 'mm-dd-yyyy';
@@ -13,6 +14,20 @@ mongoConnect.connect().then(function(){
 
 var app = express();
 
+createAttendanceList = function(inClass, classList){
+	var deferred = q.defer(),
+	index;
+	for(x = 0; x < inClass.length; x++){
+		index = classList.map(function(e) { return e.rcs; }).indexOf(inClass[x].rcs)
+		if(index != -1){
+			classList[index].present = true;
+		}
+		if(x == inClass.length - 1){
+			deferred.resolve(classList);
+		}
+	}
+	return deferred.promise;
+}
 
 
 router.get("/byDate", function(req, res){
@@ -26,11 +41,14 @@ router.get("/byDate", function(req, res){
 			res.status(404).send('No Attendance');
 		}
 		else{
-			console.log(docs[0].attendance);
 			var inClass = docs[0].attendance;
 			db.collection('Classes').find({'_id': new mongo.ObjectId(req.query.classID)}, {"classList": 1, _id: 0}).toArray(function(err, docs){
 				if(err) throw err;
-				res.send({classList: docs[0].classList, inClass: inClass});
+				//$scope.inClass.map(function(e){return e.rcs}).indexOf(student.rcs)
+				createAttendanceList(inClass, docs[0].classList).then(function(data){
+					res.send({classList: data})
+				});
+				//res.send({classList: docs[0].classList, inClass: inClass});
 			});
 		}
 

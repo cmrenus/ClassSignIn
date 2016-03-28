@@ -87,4 +87,35 @@ angular.module('ClassSignIn')
 		});
 	};
 
+	$scope.deleteModal = function(rcs, classID){
+        $scope.modalInstance = $modal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'client/views/deleteStudentModal.html',
+            controller: ['$scope', function(scope) {
+                scope.cancel = $scope.cancel;
+                scope.rcs = rcs;
+                scope.classID = classID
+                scope.deleteStudent = $scope.deleteStudent;
+            }]
+        });
+    };
+
+    $scope.deleteStudent = function(rcs, classID){
+      	adminService.deleteStudent(rcs, classID).then(function(res){
+            /*for(x in $scope.users){
+                if($scope.users[x].CEC == CEC){
+                    $scope.users.splice(x, 1);
+                    $scope.modalInstance.dismiss('cancel');
+                    return;
+                }
+            }*/
+            console.log(res);
+            $scope.cancel();
+        },
+        function(err){
+        	console.log(err);
+        });
+    };
+
+
 }]);

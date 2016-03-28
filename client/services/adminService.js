@@ -60,4 +60,11 @@ angular.module('ClassSignIn')
 		});
 	};
 
+	this.deleteStudent = function(rcs, classID){
+		return $http({
+			method: 'DELETE',
+			url: 'admin/deleteStudent?rcs=' + rcs + '&classID='+classID
+		});
+	};
+
 }]);

@@ -27,7 +27,7 @@
             <div class="col-sm-3">
                 <select name="className" ng-model="newClass.className">
                   <option value="">---Please select---</option>
-                  <option value="Intro">Intro To IT</option> 
+                  <option value="Intro">Intro To IT</option>
                   <option value="WebSys">Web Systems</option>
                   <option value="WebSci">Web Science</option>
                   <option value="Capstone">Capstone</option>
@@ -93,7 +93,7 @@
         <tbody>
           <tr ng-repeat="student in students">
             <td>
-              <button class="btn btn-danger" ng-click="deleteModal(user.CEC)">
+              <button class="btn btn-danger" ng-click="deleteModal(student.rcs, classSelect)">
                 <span class="glyphicon glyphicon-remove"></span>
               </button>
             </td>
