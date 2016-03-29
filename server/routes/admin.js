@@ -19,7 +19,7 @@ router.post("/newClass", function(req, res){
 			res.error(409).send("Class already exists");
 		}
 		else{
-			collection.insert({'semester': req.body.semester, 'className': req.body.className, 'TA': req.body.TARCS},
+			collection.insert({'semester': req.body.semester, 'className': req.body.className, 'TA': req.body.TARCS, 'startTime' : req.body.startTime, 'days': req.body.days},
 				function(err, result){
 					if(err) throw err;
 					console.log(result);

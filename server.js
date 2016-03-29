@@ -20,6 +20,7 @@ mongoConnect.connect().then(function() {
 var routes = require('./server/routes/index');
 var admin = require('./server/routes/admin');
 var TA = require('./server/routes/TA');
+var student = require('./server/routes/student');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -54,6 +55,7 @@ var cas = new CASAuthentication({
 app.use('/', routes);
 app.use('/admin', admin);
 app.use('/attendance', TA);
+app.use('/signIn', student);
 
 
 //CAS route handlers

@@ -67,4 +67,12 @@ angular.module('ClassSignIn')
 		});
 	};
 
+	this.signIn = function(geoLocation){
+		return $http({
+			method: 'POST',
+			url: 'signIn',
+			data: {coords: {latitude: geoLocation.coords.latitude, longitude: geoLocation.coords.longitude}, time: geoLocation.timestamp}
+		});
+	};
+
 }]);
