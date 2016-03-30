@@ -47,7 +47,9 @@ app.use(session({
 var cas = new CASAuthentication({
     cas_url: 'https://cas-auth.rpi.edu/cas',
     service_url: 'http://localhost:' + port,
-    cas_version: '2.0'
+    cas_version: '2.0',
+    is_dev_mode: true,
+    dev_mode_user: 'renusc'
 });
 
 
@@ -57,15 +59,14 @@ app.use('/admin', admin);
 app.use('/attendance', TA);
 app.use('/signIn', student);
 
-
 //CAS route handlers
 app.get('/login', cas.bounce, function (req, res) {
-    console.log(req.query);
+    req.session.class = req.query.class;
   	if (!req.session || !req.session.cas_user) {
         res.redirect('/');
     }
     console.log(req.session);
-    if(req.session.cas_user == "RENUSC"){
+    if(req.session.cas_user == "PLOTKA"){
     	res.redirect('/#/admin');
     }
     else{

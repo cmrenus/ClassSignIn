@@ -35,13 +35,15 @@ router.get("/byDate", function(req, res){
 	var date = dateFormat(req.query.date, 'format');
 	//console.log(date);
 	var collection = db.collection('Attendance');
-	collection.find({'classID': req.query.classID, 'attendance.date': date}, {_id: 0, 'attendance.rcs': 1}).toArray(function(err, docs){
+	collection.aggregate([{$match: {classID: req.query.classID, 'attendance.date': date}}, {$project: {attendance: {$filter: {input: '$attendance', as: 'item', cond: {$eq: ['$$item.date', date]}}}}}]).toArray(function(err, docs){
+	//collection.find({'classID': req.query.classID, 'attendance.date': date}, {_id: 0,{$filter: {input: '$attendance', as: "item", cond: {$eq: ['$$item.date': date}]}}}).toArray(function(err, docs){
 		if(err) throw err;
 		if(docs[0] == undefined){
 			res.status(404).send('No Attendance');
 		}
 		else{
 			var inClass = docs[0].attendance;
+			console.log(inClass);
 			db.collection('Classes').find({'_id': new mongo.ObjectId(req.query.classID)}, {"classList": 1, _id: 0}).toArray(function(err, docs){
 				if(err) throw err;
 				//$scope.inClass.map(function(e){return e.rcs}).indexOf(student.rcs)

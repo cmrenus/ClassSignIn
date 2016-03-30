@@ -18,8 +18,7 @@ angular.module('ClassSignIn')
 	$scope.login = function(){
 		$http({
 			method : 'GET',
-			url: '/login',
-			data: {'class' : $scope.classSelect}
+			url: '/login?class=' + $scope.classSelect,
 		}).then(function(data){
 			$window.location = data.data;
 		}).catch(function(err){
