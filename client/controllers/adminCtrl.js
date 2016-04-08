@@ -47,11 +47,10 @@ angular.module('ClassSignIn')
 	$scope.getClassInfo = function(classID){
 		selectedClass = classID;
 		adminService.getClassInfo(classID).then(function(res){
-			console.log(res.data);
-			console.log(Date(res.data.startTime));
-			//res.data.startTime = Date(res.data.startTime);
+			res.data.startTime = new Date(res.data.startTime);
 			$scope.editClassInfo = res.data;
-			$scope.editClassInfo.startTime = Date(res.data.startTime);
+			console.log(res.data);
+			//$scope.editClassInfo.startTime = new Date(res.data.startTime);
 			//$scope.students = res.data;
 
 		},
@@ -59,6 +58,16 @@ angular.module('ClassSignIn')
 			console.log(err);
 		});
 	};
+
+	$scope.editClass = function(){
+		var changes = {_id: $scope.editClassInfo._id, TA: $scope.editClassInfo.TA, days: $scope.editClassInfo.days, startTime: $scope.editClassInfo.startTime }
+		adminService.editClass(changes).then(function(res){
+			console.log(res);
+		},
+		function(err){
+			console.log(err);
+		});
+	}
 
 	$scope.changeSem = function(semester){
 		console.log(semester);
@@ -76,7 +85,6 @@ angular.module('ClassSignIn')
           animation: $scope.animationsEnabled,
           templateUrl: 'client/views/addStudentModal.html',
           controller: ['$scope', function(scope){
-            //scope.alerts = $scope.alerts;
             scope.cancel = $scope.cancel;
             scope.addStudent = $scope.addStudent;
           }]
@@ -92,8 +100,6 @@ angular.module('ClassSignIn')
 
    	$scope.addStudent = function(newStudent){
 		adminService.addStudent(newStudent, selectedClass).then(function(res){
-			console.log(res);
-			console.log(newStudent);
 			$scope.editClassInfo.classList.push(newStudent);
 			$scope.modalInstance.dismiss('cancel');
 		},

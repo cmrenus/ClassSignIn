@@ -56,6 +56,15 @@ router.post("/addStudent", function(req, res){
 	});
 });
 
+router.post("/editClass", function(req, res){
+	var collection = db.collection('Classes');
+	console.log(req.body);
+	collection.update({'_id': new mongo.ObjectId(req.body._id)}, {$set: {startTime: req.body.startTime, TA: req.body.TA, days: req.body.days}}, function(err){
+		if(err) res.send(err);
+		else res.send("Success");
+	})
+});
+
 //retrieve the current semester
 router.get('/currentSemester', function(req, res){
 	var collection = db.collection('Current');

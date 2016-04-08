@@ -75,4 +75,12 @@ angular.module('ClassSignIn')
 		});
 	};
 
+	this.editClass = function(changes){
+		return $http({
+			method: 'POST',
+			url: 'admin/editClass',
+			data: changes
+		});
+	};
+
 }]);
