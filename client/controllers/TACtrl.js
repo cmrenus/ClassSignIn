@@ -4,6 +4,7 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
 	adminService.getCurrentSemester().then(function(res){
 		adminService.getClasses(res.data).then(function(res){
 			$scope.classes = res.data;
+      $scope.classes2 = res.data;
 		},
 		function(err){
 			console.log(err);
@@ -102,9 +103,15 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
   getAttendanceByDate = function(date, classID){
   	adminService.getAttendanceByDate(date, classID).then(function(res){
   		console.log(res);
-  		$scope.classList = res.data.classList;
-  		$scope.inClass = res.data.inClass;
-  		$scope.noAttendance = undefined;
+      if(res.status == 204){
+        $scope.noAttendance = "No Attendance";
+        $scope.classList = undefined;
+      }
+      else{
+    		$scope.classList = res.data.classList;
+    		$scope.inClass = res.data.inClass;
+    		$scope.noAttendance = undefined;
+      }
   	},
   	function(err){
   		console.log(err);
@@ -113,13 +120,24 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
   	});
   };
 
-  checkAttendance = function(student){
-  	return true;
-  	/*if($scope.inClass.map(function(e){return e.rcs}).indexOf(student.rcs)){
-  	 	return true;
-  	}
-  	else
-  		return false;
-*/
-  }
+  $scope.getStudents = function(classID){
+    console.log(classID);
+    adminService.getClassInfo(classID).then(function(res){
+      console.log(res);
+      $scope.classList = res.data.classList;
+    },
+    function(err){
+      console.log(err);
+    });
+  };
+
+  $scope.getAttendanceByStudent = function(rcs, classID){
+    adminService.getAttendanceByStudent(rcs, classID).then(function(res){
+      console.log(res);
+      $scope.dates = res.data;
+    },
+    function(err){
+      console.log(err);
+    });
+  };
 }]);

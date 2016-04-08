@@ -1,38 +1,61 @@
 
 
 <div class="container-fluid" ng-controller="TACtrl">
-	<div class="col-md-6">
-		<!--<pre>Selected date is: <em>{{dt}}</em></pre>-->
-		<label for="classSelect">Please Select a Class</label><br>
-		<select name="classSelect" id="classSelect" ng-model="classSelect">
-			<option value="">---Please select---</option>
-			<option ng-repeat="class in classes" value="{{class._id}}">{{class.className}}</option>
-		</select>
-		<h4>Calender</h4>
-		<div ng-show="classSelect" style="display:inline-block; min-height:290px;">
-			<uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions" ng-change="getAttendanceByDate(classSelect)"></uib-datepicker>
-		</div>
-	</div>
-	<div class="col-md-6">
-		<table ng-show="classList" class="table table-striped">
-	        <thead><tr>
-	          <th>Last</th>
-	          <th>First</th>
-	          <th>RCS</th>
-	          <th>Present</th>
-	        </tr></thead>
-	        <tbody>
-	          <tr ng-repeat="student in classList">
-	            <td>{{student.lastName}}</td>
-	          	<td>{{student.firstName}}</td>
-	          	<td>{{student.rcs}}</td>
-	            <td ng-switch="{{student.present}}">
-	            	<img ng-switch-when="true" width="20px" ng-src="resources/images/greenCheck.png">
-					<img ng-switch-when="undefined" width="20px" ng-src="resources/images/redCross.png">
-	            </td>
-	          </tr>
-	        </tbody>
-	    </table>
-	    <h2 ng-show="noAttendance" ng-model="noAttendance">{{noAttendance}}</h2>
-	</div>
+
+	<uib-tabset active="active">
+	    <uib-tab index="0" heading="Attendance By Date">
+			<div class="col-md-6">
+				<!--<pre>Selected date is: <em>{{dt}}</em></pre>-->
+				<label for="classSelect">Please Select a Class</label><br>
+				<select name="classSelect" id="classSelect" ng-model="classSelect">
+					<option value="">---Please select---</option>
+					<option ng-repeat="class in classes" value="{{class._id}}">{{class.className}}</option>
+				</select>
+				<h4>Calender</h4>
+				<div ng-show="classSelect" style="display:inline-block; min-height:290px;">
+					<uib-datepicker ng-model="dt" class="well well-sm" datepicker-options="inlineOptions" ng-change="getAttendanceByDate(classSelect)"></uib-datepicker>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<table ng-show="classList" class="table table-striped">
+			        <thead><tr>
+			          <th>Last</th>
+			          <th>First</th>
+			          <th>RCS</th>
+			          <th>Present</th>
+			        </tr></thead>
+			        <tbody>
+			          <tr ng-repeat="student in classList">
+			            <td>{{student.lastName}}</td>
+			          	<td>{{student.firstName}}</td>
+			          	<td>{{student.rcs}}</td>
+			            <td ng-switch="{{student.present}}">
+			            	<img ng-switch-when="true" width="20px" ng-src="resources/images/greenCheck.png">
+							<img ng-switch-when="undefined" width="20px" ng-src="resources/images/redCross.png">
+			            </td>
+			          </tr>
+			        </tbody>
+			    </table>
+			    <h2 ng-show="noAttendance" ng-model="noAttendance">{{noAttendance}}</h2>
+			</div>
+		</uib-tab>
+		<uib-tab index="1" heading="Attendance By Student">
+			<label for="classSelectStudent">Please Select a Class</label><br>
+			<select name="classSelectStudent" id="classSelectStudent" ng-change="getStudents(classSelectStudent)" ng-model="classSelectStudent">
+				<option value="">---Please select---</option>
+				<option ng-repeat="class in classes2" value="{{class._id}}">{{class.className}}</option>
+			</select><br>
+			<label ng-show="classList" for="studentAttendance">Please Select a Class</label><br>
+			<select ng-show="classList" name="studentSelect" id="studentSelect" ng-model="studentSelect" ng-change="getAttendanceByStudent(studentSelect, classSelectStudent)">
+				<option value="">---Please Select---</option>
+				<option ng-repeat="student in classList" value="{{student.rcs}}">{{student.rcs}}</option>
+			</select>
+
+			<div ng-show="dates" class="container">
+				<ul>
+					<li ng-repeat="date in dates">{{date.date}}</li>
+				</ul>
+			</div>
+		</uib-tab>
+	</uib-tabset>
 </div>

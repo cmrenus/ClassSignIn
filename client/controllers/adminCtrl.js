@@ -34,6 +34,7 @@ angular.module('ClassSignIn')
 	};
 
 	$scope.getClasses = function(semester){
+		$scope.editClassInfo = undefined;
 		selectedSemester = semester;
 		adminService.getClasses(semester).then(function(res){
 			console.log(res.data);
@@ -46,17 +47,19 @@ angular.module('ClassSignIn')
 	
 	$scope.getClassInfo = function(classID){
 		selectedClass = classID;
-		adminService.getClassInfo(classID).then(function(res){
-			res.data.startTime = new Date(res.data.startTime);
-			$scope.editClassInfo = res.data;
-			console.log(res.data);
-			//$scope.editClassInfo.startTime = new Date(res.data.startTime);
-			//$scope.students = res.data;
+		if(classID != ""){
+			adminService.getClassInfo(classID).then(function(res){
+				res.data.startTime = new Date(res.data.startTime);
+				$scope.editClassInfo = res.data;
+				console.log(res.data);
+				//$scope.editClassInfo.startTime = new Date(res.data.startTime);
+				//$scope.students = res.data;
 
-		},
-		function(err){
-			console.log(err);
-		});
+			},
+			function(err){
+				console.log(err);
+			});
+		}
 	};
 
 	$scope.editClass = function(){

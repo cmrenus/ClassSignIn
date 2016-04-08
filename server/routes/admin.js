@@ -96,6 +96,7 @@ router.get("/classList", function(req, res){
 
 router.get('/classInfo', function(req, res){
 	var collection = db.collection('Classes');
+	console.log(req.query);
 	collection.find({'_id': new mongo.ObjectId(req.query.classID)}).toArray(function(err, docs){
 		if(err) throw err;
 		res.send(docs[0]);

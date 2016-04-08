@@ -60,6 +60,13 @@ angular.module('ClassSignIn')
 		});
 	};
 
+	this.getAttendanceByStudent = function(rcs, classID){
+		return $http({
+			method: 'GET',
+			url: 'attendance/byStudent?rcs=' + rcs + '&classID=' + classID
+		});
+	};
+
 	this.deleteStudent = function(rcs, classID){
 		return $http({
 			method: 'DELETE',
