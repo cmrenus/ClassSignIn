@@ -20,6 +20,13 @@ angular.module('ClassSignIn')
 	$scope.addClass = function(){
 		adminService.addClass($scope.newClass).then(function(res){
 			console.log(res);
+			$scope.newClass = undefined;
+			adminService.getSemesters().then(function(res){
+				$scope.semesters = res.data;
+			},
+			function(err){
+				console.log(error);
+			});
 		},
 		function(err){
 			console.log(err);
@@ -37,11 +44,16 @@ angular.module('ClassSignIn')
 		});
 	};
 	
-	$scope.getStudents = function(classID){
+	$scope.getClassInfo = function(classID){
 		selectedClass = classID;
-		adminService.getStudentList(classID).then(function(res){
+		adminService.getClassInfo(classID).then(function(res){
 			console.log(res.data);
-			$scope.students = res.data;
+			console.log(Date(res.data.startTime));
+			//res.data.startTime = Date(res.data.startTime);
+			$scope.editClassInfo = res.data;
+			$scope.editClassInfo.startTime = Date(res.data.startTime);
+			//$scope.students = res.data;
+
 		},
 		function(err){
 			console.log(err);
@@ -81,6 +93,9 @@ angular.module('ClassSignIn')
    	$scope.addStudent = function(newStudent){
 		adminService.addStudent(newStudent, selectedClass).then(function(res){
 			console.log(res);
+			console.log(newStudent);
+			$scope.editClassInfo.classList.push(newStudent);
+			$scope.modalInstance.dismiss('cancel');
 		},
 		function(err){
 			console.log(err);
@@ -102,14 +117,13 @@ angular.module('ClassSignIn')
 
     $scope.deleteStudent = function(rcs, classID){
       	adminService.deleteStudent(rcs, classID).then(function(res){
-            /*for(x in $scope.users){
-                if($scope.users[x].CEC == CEC){
-                    $scope.users.splice(x, 1);
+            for(x in $scope.editClassInfo.classList){
+                if($scope.editClassInfo.classList[x].rcs == rcs){
+                    $scope.editClassInfo.classList.splice(x, 1);
                     $scope.modalInstance.dismiss('cancel');
                     return;
                 }
-            }*/
-            console.log(res);
+            }
             $scope.cancel();
         },
         function(err){

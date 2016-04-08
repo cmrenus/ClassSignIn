@@ -30,10 +30,10 @@ angular.module('ClassSignIn')
 		});
 	};
 
-	this.getStudentList = function(classID){
+	this.getClassInfo = function(classID){
 		return $http({
 			method: 'GET',
-			url: 'admin/studentList?classID=' + classID
+			url: 'admin/classInfo?classID=' + classID
 		});
 	};
 

@@ -84,7 +84,7 @@
       
 
     </uib-tab>
-    <uib-tab index="2" heading="Add/Delete Student">
+    <uib-tab index="3" heading="Edit Class/Students">
       <label for="semSelect">Please Select a Semester</label><br>
       <select name="semSelect" id="semSelect" ng-change="getClasses(semSelect)" ng-model="semSelect" ng-init="semSelect=''">
         <option value="">---Please select---</option>
@@ -92,31 +92,72 @@
       </select>
       <br>
       <label ng-show="classes" for="classSelect">Please Select a Class</label><br>
-      <select ng-show="classes" name="classSelect" id="classSelect" ng-change="getStudents(classSelect)" ng-model="classSelect">
+      <select ng-show="classes" name="classSelect" id="classSelect" ng-change="getClassInfo(classSelect)" ng-model="classSelect">
         <option value="">---Please select---</option>
         <option ng-repeat="class in classes" value="{{class._id}}">{{class.className}}</option>
       </select>
-      <button ng-show="students == '' || students" class="btn btn-primary" ng-click="addStudentModal()">Add Student</button>
-      <table ng-show="students" class="table table-striped">
-        <thead><tr>
-          <th>Delete</th>
-          <th>RCS ID</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-        </tr></thead>
-        <tbody>
-          <tr ng-repeat="student in students">
-            <td>
-              <button class="btn btn-danger" ng-click="deleteModal(student.rcs, classSelect)">
-                <span class="glyphicon glyphicon-remove"></span>
-              </button>
-            </td>
-            <td>{{student.rcs}}</td>
-            <td>{{student.firstName}}</td>
-            <td>{{student.lastName}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div ng-show="editClassInfo">
+        <form name="editClassForm" class="form-horizontal">
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label form-text">Start Time </label>
+              <div class="col-sm-3">
+                <input class="form-control" type="time" ng-model="editClassInfo.startTime" placeholder="14:00"required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label form-text">Days of Week </label>
+              <div class="col-sm-3">
+                <input class="form-control" type="text" ng-model="editClassInfo.days" placeholder="ex. MR, W, TF" required >
+              </div> 
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label form-text">TA RCSID </label>
+              <div class="col-sm-3">
+                <input class="form-control" type="text" ng-model="editClassInfo.TA" placeholder="RCS ID" required >
+              </div> 
+            </div>
+            <!--
+            <div class="form-group">
+              <label class="col-sm-3 control-label form-text">Class List</label>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                      <span class="btn btn-primary btn-file">
+                          Browse&hellip; <input type="file" ngf-select ng-model="editClass.classList" name="file">
+                      </span>
+                  </span>
+                  <input type="text" ng-model="editClass.classList.name" readonly>
+                </div>
+              </div>
+            </div>-->
+
+            
+          </form>
+        <button class="btn btn-primary" ng-click="addStudentModal()">Add Student</button>
+        <table class="table table-striped">
+          <thead><tr>
+            <th>Delete</th>
+            <th>RCS ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+          </tr></thead>
+          <tbody>
+            <tr ng-repeat="student in editClassInfo.classList">
+              <td>
+                <button class="btn btn-danger" ng-click="deleteModal(student.rcs, classSelect)">
+                  <span class="glyphicon glyphicon-remove"></span>
+                </button>
+              </td>
+              <td>{{student.rcs}}</td>
+              <td>{{student.firstName}}</td>
+              <td>{{student.lastName}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </uib-tab>
   </uib-tabset>
 </div>
