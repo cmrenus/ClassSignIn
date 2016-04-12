@@ -16,7 +16,7 @@ router.post("/newClass", function(req, res){
 	var collection = db.collection('Classes');
 	var semester = collection.find({'semester': req.body.semester, 'className': req.body.className}).toArray(function(err, docs){
 		if(docs.length > 0){
-			res.error(409).send("Class already exists");
+			res.status(409).send("Class already exists");
 		}
 		else{
 			collection.insert({'semester': req.body.semester, 'className': req.body.className, 'TA': req.body.TARCS, 'startTime' : req.body.startTime, 'days': req.body.days},

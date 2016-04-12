@@ -13,6 +13,15 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
 		console.log(err);
 	});
 
+  $scope.$watchGroup(['dt', 'classSelect'], function(newValues, oldValues){
+    console.log("fuck");
+    console.log($scope.classSelect);
+    if($scope.classSelect != undefined){
+      console.log("shit");
+      getAttendanceByDate(newValues[0], newValues[1]);
+    }
+  });
+
 
   $scope.today = function() {
     $scope.dt = new Date();
@@ -92,13 +101,7 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
     }
 
     return '';
-  }
-
-  $scope.$watchGroup(['dt', 'classSelect'], function(newValues, oldValues){
-  	if($scope.classSelect != undefined){
-  		getAttendanceByDate(newValues[0], newValues[1]);
-  	}
-  });
+  };
 
   getAttendanceByDate = function(date, classID){
   	adminService.getAttendanceByDate(date, classID).then(function(res){
@@ -119,12 +122,12 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
   		$scope.noAttendance = err.data;
   	});
   };
-
+/*
   $scope.getStudents = function(classID){
     console.log(classID);
     adminService.getClassInfo(classID).then(function(res){
       console.log(res);
-      $scope.classList = res.data.classList;
+      $scope.classList2 = res.data.classList;
     },
     function(err){
       console.log(err);
@@ -134,10 +137,10 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
   $scope.getAttendanceByStudent = function(rcs, classID){
     adminService.getAttendanceByStudent(rcs, classID).then(function(res){
       console.log(res);
-      $scope.dates = res.data;
+      //$scope.dates = res.data;
     },
     function(err){
       console.log(err);
     });
-  };
+  };*/
 }]);

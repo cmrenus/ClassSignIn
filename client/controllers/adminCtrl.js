@@ -20,7 +20,17 @@ angular.module('ClassSignIn')
 	$scope.addClass = function(){
 		adminService.addClass($scope.newClass).then(function(res){
 			console.log(res);
-			$scope.newClass = undefined;
+			$scope.modalInstance = $modal.open({
+	            animation: $scope.animationsEnabled,
+	            templateUrl: 'client/views/alert.html',
+	            controller: ['$scope', function(scope) {
+	                scope.cancel = $scope.cancel;
+	                scope.title = "Add Class";
+	              	scope.body = "Class " + $scope.newClass.semester + " " + $scope.newClass.className + " was added";
+	            	$scope.newClass = undefined;
+	            }]
+	        });
+	        //$scope.newClass = undefined;
 			adminService.getSemesters().then(function(res){
 				$scope.semesters = res.data;
 			},
@@ -66,6 +76,15 @@ angular.module('ClassSignIn')
 		var changes = {_id: $scope.editClassInfo._id, TA: $scope.editClassInfo.TA, days: $scope.editClassInfo.days, startTime: $scope.editClassInfo.startTime }
 		adminService.editClass(changes).then(function(res){
 			console.log(res);
+			$scope.modalInstance = $modal.open({
+	          animation: $scope.animationsEnabled,
+	          templateUrl: 'client/views/alert.html',
+	          controller: ['$scope', function(scope){
+	            scope.cancel = $scope.cancel;
+	            scope.title = "Edit Class";
+	            scope.body = "The edit you made to the class was saved!";
+	          }]
+	        });
 		},
 		function(err){
 			console.log(err);
@@ -75,6 +94,16 @@ angular.module('ClassSignIn')
 	$scope.changeSem = function(semester){
 		console.log(semester);
 		adminService.changeSemester(semester).then(function(res){
+			$scope.currentSem = semester;
+			$scope.modalInstance = $modal.open({
+	          animation: $scope.animationsEnabled,
+	          templateUrl: 'client/views/alert.html',
+	          controller: ['$scope', function(scope){
+	            scope.cancel = $scope.cancel;
+	            scope.title = "Current Semester Changed";
+	            scope.body = "Current semester changed to " + semester;
+	          }]
+	        });
 			console.log(res);
 		},
 		function(err){
@@ -102,9 +131,21 @@ angular.module('ClassSignIn')
     };
 
    	$scope.addStudent = function(newStudent){
+   		if($scope.editClassInfo.classList == undefined){
+   			$scope.editClassInfo.classList = [];
+   		}
 		adminService.addStudent(newStudent, selectedClass).then(function(res){
 			$scope.editClassInfo.classList.push(newStudent);
 			$scope.modalInstance.dismiss('cancel');
+			$scope.modalInstance = $modal.open({
+	          animation: $scope.animationsEnabled,
+	          templateUrl: 'client/views/alert.html',
+	          controller: ['$scope', function(scope){
+	            scope.cancel = $scope.cancel;
+	            scope.title = "Add Student";
+	            scope.body = "Student " + newStudent.rcs + " was added";
+	          }]
+	        });
 		},
 		function(err){
 			console.log(err);
