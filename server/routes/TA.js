@@ -85,8 +85,12 @@ router.get('/byStudent', function(req, res){
 		 }},
 		 ]).toArray(function(err, docs){
 		 	if(err) throw err;
-			console.log(docs[0].attendance);
-			res.send(docs[0].attendance);
+		 	if(docs[0] == undefined){
+		 		res.status(204).send('No Attendance');
+		 	}
+		 	else{
+				res.send(docs[0].attendance);
+			}
 		});
 });
 

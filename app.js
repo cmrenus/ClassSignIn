@@ -1,6 +1,6 @@
 var app = angular.module('ClassSignIn', ['ngRoute', 'ui.bootstrap', 'ngFileUpload', 'geolocation']);
 
-app.config(['$routeProvider', function($routeProvider){
+app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
 	$routeProvider.
 	when('/', {
 		templateUrl: 'client/views/home.html',
@@ -21,4 +21,6 @@ app.config(['$routeProvider', function($routeProvider){
 	otherwise({
 		redirectTo:'/'
 	});
+
+	//$locationProvider.html5Mode(true);
 }]);

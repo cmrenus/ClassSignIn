@@ -25,8 +25,9 @@ var student = require('./server/routes/student');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', express.static(path.join(__dirname, '/')));
+
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "localhost:8005");
     res.header("Access-Control-Allow-Methods", "*");
@@ -47,11 +48,49 @@ app.use(session({
 var cas = new CASAuthentication({
     cas_url: 'https://cas-auth.rpi.edu/cas',
     service_url: 'http://localhost:' + port,
-    cas_version: '2.0',
+    cas_version: '2.0'/*,
     is_dev_mode: true,
-    dev_mode_user: 'renusc'
+    dev_mode_user: 'renusc'*/
+});
+/*
+app.use('/signIn', function(req, res, next){
+    req.query;
+    if(req.session.cas_user == "RENUSC"){
+        req.query.returnTo = '/#/admin';
+    }
+    else{
+        req.query.returnTo = '/#/signIn';
+    }
+    next();
+});*/
+
+//CAS route handlers
+app.get('/signIn', cas.bounce, function (req, res, next) {
+    console.log('here');
+    req.session.class = req.query.class;
+    if (!req.session || !req.session.cas_user) {
+        res.send('/#/');
+    }
+    console.log(req.session);
+    if(req.session.cas_user == "RENUSC"){
+        res.send('/#/admin');
+    }
+    else{
+        res.send('/#/signIn');
+        next();
+    }
+
+    console.log('after redirects');
 });
 
+app.use('/signIn', function(req, res, next){
+    if(req.session.cas_user == 'RENUSC'){
+        res.status(300).send('/#/admin');
+    }
+    else{
+        next();
+    }
+})
 
 //routes
 app.use('/', routes);
@@ -59,20 +98,7 @@ app.use('/admin', admin);
 app.use('/attendance', TA);
 app.use('/signIn', student);
 
-//CAS route handlers
-app.get('/login', cas.bounce, function (req, res) {
-    req.session.class = req.query.class;
-  	if (!req.session || !req.session.cas_user) {
-        res.redirect('/');
-    }
-    console.log(req.session);
-    if(req.session.cas_user == "PLOTKA"){
-    	res.redirect('/#/admin');
-    }
-    else{
-        res.redirect('/#/signIn');
-    }
-});
+
 
 app.get('/logout', cas.logout);
 

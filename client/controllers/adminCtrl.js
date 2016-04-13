@@ -46,6 +46,7 @@ angular.module('ClassSignIn')
 	$scope.getClasses = function(semester){
 		$scope.editClassInfo = undefined;
 		selectedSemester = semester;
+		$scope.classSelect = "";
 		adminService.getClasses(semester).then(function(res){
 			console.log(res.data);
 			$scope.classes = res.data;
@@ -69,6 +70,9 @@ angular.module('ClassSignIn')
 			function(err){
 				console.log(err);
 			});
+		}
+		else{
+			$scope.editClassInfo = undefined;
 		}
 	};
 

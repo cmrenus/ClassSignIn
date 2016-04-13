@@ -7,7 +7,7 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
     dt: new Date(),
     classSelectStudent: undefined,
   };
-  
+
 	adminService.getCurrentSemester().then(function(res){
 		adminService.getClasses(res.data).then(function(res){
 			$scope.classes = res.data;
@@ -132,6 +132,8 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
     adminService.getClassInfo(classID).then(function(res){
       console.log(res);
       $scope.classList2 = res.data.classList;
+      $scope.dates = undefined;
+      $scope.noDates = undefined;
     },
     function(err){
       console.log(err);
@@ -141,10 +143,21 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
   $scope.getAttendanceByStudent = function(rcs, classID){
     adminService.getAttendanceByStudent(rcs, classID).then(function(res){
       console.log(res);
-      $scope.dates = res.data;
+      if(res.status == 204){
+        $scope.noDates = "No Attendance";
+        $scope.dates = undefined;
+      }
+      else{
+        $scope.dates = res.data;
+        $scope.noDates = undefined;
+      }
+      
     },
     function(err){
       console.log(err);
+      $scope.noDates = err.data;
+      $scope.dates = undefined;
+
     });
   };
 }]);

@@ -11,8 +11,6 @@ mongoConnect.connect().then(function(){
 	db = mongoConnect.db;
 });
 
-var app = express();
-
 
 router.post('/', function(req,res){
 	console.log(req.body);
@@ -44,7 +42,11 @@ router.post('/', function(req,res){
 				}}
 			]).toArray(function(err,docs){
 				if(err) throw err;
-				if(docs[0].attendance.length == 0){
+				console.log(docs);
+				if(docs.length == 0){
+					console.log('already signed in');
+				}
+				else if(docs[0].attendance.length == 0){
 					//not signed in
 					console.log("not signed in");
 					console.log(req.session.class);
