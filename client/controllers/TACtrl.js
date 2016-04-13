@@ -1,6 +1,13 @@
 angular.module('ClassSignIn').
 controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
 	
+
+  $scope.date = {
+    classSelect: undefined,
+    dt: new Date(),
+    classSelectStudent: undefined,
+  };
+  
 	adminService.getCurrentSemester().then(function(res){
 		adminService.getClasses(res.data).then(function(res){
 			$scope.classes = res.data;
@@ -13,23 +20,20 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
 		console.log(err);
 	});
 
-  $scope.$watchGroup(['dt', 'classSelect'], function(newValues, oldValues){
-    console.log("fuck");
-    console.log($scope.classSelect);
-    if($scope.classSelect != undefined){
-      console.log("shit");
+  $scope.$watchGroup(['date.dt', 'date.classSelect'], function(newValues, oldValues){
+    if($scope.date.classSelect != undefined){
       getAttendanceByDate(newValues[0], newValues[1]);
     }
   });
 
 
   $scope.today = function() {
-    $scope.dt = new Date();
+    $scope.date.dt = new Date();
   };
   $scope.today();
 
   $scope.clear = function() {
-    $scope.dt = null;
+    $scope.date.dt = null;
   };
 
   $scope.inlineOptions = {
@@ -62,7 +66,7 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
 
 
   $scope.setDate = function(year, month, day) {
-    $scope.dt = new Date(year, month, day);
+    $scope.date.dt = new Date(year, month, day);
   };
 
   $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
@@ -122,7 +126,7 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
   		$scope.noAttendance = err.data;
   	});
   };
-/*
+
   $scope.getStudents = function(classID){
     console.log(classID);
     adminService.getClassInfo(classID).then(function(res){
@@ -137,10 +141,10 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
   $scope.getAttendanceByStudent = function(rcs, classID){
     adminService.getAttendanceByStudent(rcs, classID).then(function(res){
       console.log(res);
-      //$scope.dates = res.data;
+      $scope.dates = res.data;
     },
     function(err){
       console.log(err);
     });
-  };*/
+  };
 }]);
