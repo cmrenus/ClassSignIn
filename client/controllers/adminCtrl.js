@@ -7,14 +7,14 @@ angular.module('ClassSignIn')
 		$scope.semesters = res.data;
 	},
 	function(err){
-		console.log(error);
+		errorModal(err.data);
 	});
 
 	adminService.getCurrentSemester().then(function(res){
 		$scope.currentSem = res.data;
 	},
 	function(err){
-		console.log(err);
+		errorModal(err.data);
 	});
 
 	$scope.addClass = function(){
@@ -27,7 +27,7 @@ angular.module('ClassSignIn')
 	                scope.cancel = $scope.cancel;
 	                scope.title = "Add Class";
 	              	scope.body = "Class " + $scope.newClass.semester + " " + $scope.newClass.className + " was added";
-	            	$scope.newClass = undefined;
+	            	$scope.newClass = {};
 	            }]
 	        });
 	        //$scope.newClass = undefined;
@@ -35,11 +35,11 @@ angular.module('ClassSignIn')
 				$scope.semesters = res.data;
 			},
 			function(err){
-				console.log(error);
+				errorModal(err.data);
 			});
 		},
 		function(err){
-			console.log(err);
+			errorModal(err.data);
 		});
 	};
 
@@ -52,7 +52,7 @@ angular.module('ClassSignIn')
 			$scope.classes = res.data;
 		},
 		function(err){
-			console.log(err);
+			errorModal(err.data);
 		});
 	};
 	
@@ -63,16 +63,13 @@ angular.module('ClassSignIn')
 				res.data.startTime = new Date(res.data.startTime);
 				$scope.editClassInfo = res.data;
 				console.log(res.data);
-				//$scope.editClassInfo.startTime = new Date(res.data.startTime);
-				//$scope.students = res.data;
-
 			},
 			function(err){
-				console.log(err);
+				errorModal(err.data);
 			});
 		}
 		else{
-			$scope.editClassInfo = undefined;
+			$scope.editClassInfo = {};
 		}
 	};
 
@@ -91,7 +88,7 @@ angular.module('ClassSignIn')
 	        });
 		},
 		function(err){
-			console.log(err);
+			errorModal(err.data);
 		});
 	}
 
@@ -111,7 +108,7 @@ angular.module('ClassSignIn')
 			console.log(res);
 		},
 		function(err){
-			console.log(err);
+			errorModal(err.data);
 		});
 	};
 
@@ -152,7 +149,7 @@ angular.module('ClassSignIn')
 	        });
 		},
 		function(err){
-			console.log(err);
+			errorModal(err.data);
 		});
 	};
 
@@ -181,9 +178,21 @@ angular.module('ClassSignIn')
             $scope.cancel();
         },
         function(err){
-        	console.log(err);
+        	errorModal(err.data);
         });
     };
+
+    errorModal = function(error){
+    	$scope.modalInstance = $modal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'client/views/alert.html',
+            controller: ['$scope', function(scope) {
+                scope.cancel = $scope.cancel;
+                scope.title = "Error";
+                scope.body = error;
+            }]
+        });
+  	};
 
 
 }]);

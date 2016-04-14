@@ -14,10 +14,10 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
       $scope.classes2 = res.data;
 		},
 		function(err){
-			console.log(err);
+			errorModal(err.data);
 		});
 	},function(err){
-		console.log(err);
+		errorModal(err.data);
 	});
 
   $scope.$watchGroup(['date.dt', 'date.classSelect'], function(newValues, oldValues){
@@ -121,9 +121,7 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
       }
   	},
   	function(err){
-  		console.log(err);
-  		$scope.classList = undefined;
-  		$scope.noAttendance = err.data;
+  		errorModal(err.data);
   	});
   };
 
@@ -136,28 +134,45 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
       $scope.noDates = undefined;
     },
     function(err){
-      console.log(err);
+      errorModal(err.data);
     });
   };
 
   $scope.getAttendanceByStudent = function(rcs, classID){
-    adminService.getAttendanceByStudent(rcs, classID).then(function(res){
-      console.log(res);
-      if(res.status == 204){
-        $scope.noDates = "No Attendance";
-        $scope.dates = undefined;
-      }
-      else{
-        $scope.dates = res.data;
-        $scope.noDates = undefined;
-      }
-      
-    },
-    function(err){
-      console.log(err);
-      $scope.noDates = err.data;
+    console.log(rcs);
+    if(rcs != ""){
+      adminService.getAttendanceByStudent(rcs, classID).then(function(res){
+        console.log(res);
+        if(res.status == 204){
+          $scope.noDates = "No Attendance";
+          $scope.dates = undefined;
+        }
+        else{
+          $scope.dates = res.data;
+          $scope.noDates = undefined;
+        }
+        
+      },
+      function(err){
+        errorModal(err.data);
+      });
+    }
+    else{
+      $scope.noDates = undefined;
       $scope.dates = undefined;
+    }
+  };
 
-    });
+
+  errorModal = function(error){
+    $scope.modalInstance = $modal.open({
+          animation: $scope.animationsEnabled,
+          templateUrl: 'client/views/alert.html',
+          controller: ['$scope', function(scope) {
+              scope.cancel = $scope.cancel;
+              scope.title = "Error";
+              scope.body = error;
+          }]
+      });
   };
 }]);
