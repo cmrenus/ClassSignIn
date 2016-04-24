@@ -1,6 +1,7 @@
 angular.module('ClassSignIn')
-.controller('adminCtrl', ['$scope', '$http', 'Upload', 'adminService', '$uibModal', function($scope, $http, upload, adminService, $modal) {
+.controller('adminCtrl', ['$scope', '$http', 'adminService', '$uibModal', function($scope, $http, adminService, $modal) {
 	$scope.newClass = {};
+	$scope.files = {};
 	var selectedSemester, selectedClass;
 
 	adminService.getSemesters().then(function(res){
@@ -18,7 +19,7 @@ angular.module('ClassSignIn')
 	});
 
 	$scope.addClass = function(){
-		adminService.addClass($scope.newClass).then(function(res){
+		adminService.addClass($scope.newClass, $scope.files).then(function(res){
 			console.log(res);
 			$scope.modalInstance = $modal.open({
 	            animation: $scope.animationsEnabled,
@@ -28,6 +29,7 @@ angular.module('ClassSignIn')
 	                scope.title = "Add Class";
 	              	scope.body = "Class " + $scope.newClass.semester + " " + $scope.newClass.className + " was added";
 	            	$scope.newClass = {};
+	            	$scopes.files = {};
 	            }]
 	        });
 	        //$scope.newClass = undefined;

@@ -13,15 +13,13 @@ mongoConnect.connect().then(function(){
 
 
 router.post('/', function(req,res){
-	console.log(req.body);
-	console.log(req.session);
 	var classes = db.collection('Classes');
 	var attendance = db.collection('Attendance');
 	var rcs = req.session.cas_user.toLowerCase();
 	var date = dateFormat(req.body.time, 'format');
-	console.log(rcs);
-
-	classes.find({_id: new mongo.ObjectId(req.session.class), 'classList.rcs': rcs}, {'classList.rcs': 1}).toArray(function(err, docs){
+	console.log(date);
+	date = '4-26-2016';
+	classes.find({_id: new mongo.ObjectId(req.cookies.class), 'classList.rcs': rcs}, {'classList.rcs': 1}).toArray(function(err, docs){
 		if(err) throw err;
 		if(docs.length == 0){
 			//return err, not in class
@@ -30,7 +28,7 @@ router.post('/', function(req,res){
 		else{
 			console.log("in this class");
 			attendance.aggregate([
-				{$match: {classID: req.session.class, 'attendance.rcs': rcs, 'attendance.date': date}},
+				{$match: {classID: req.cookies.class, 'attendance.rcs': rcs}},
 				{$project: {
 					attendance:{
 						$filter: {
@@ -44,18 +42,13 @@ router.post('/', function(req,res){
 				if(err) throw err;
 				console.log(docs);
 				if(docs.length == 0){
-					console.log('already signed in');
-				}
-				else if(docs[0].attendance.length == 0){
 					//not signed in
 					console.log("not signed in");
-					console.log(req.session.class);
-					console.log(rcs);
-					console.log(date);
-					attendance.update({'classID': req.session.class}, {$push: {attendance: {rcs:rcs, date: date}}}, function(err, docs){
+					attendance.update({'classID': req.cookies.class}, {$push: {attendance: {rcs:rcs, date: date}}}, function(err, docs){
 						if(err) throw err;
 						res.send(docs);
 					});
+					
 				}
 				else{
 					console.log('already signed in');

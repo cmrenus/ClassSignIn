@@ -1,10 +1,12 @@
 angular.module('ClassSignIn')
 .service('adminService', ['$http', 'Upload', function($http, Upload){
-	this.addClass = function(newClass){
-		console.log(newClass);
-		return $http({
+	this.addClass = function(newClass, files){
+		console.log(files);
+		return Upload.upload({
 			method: "POST",
 			data: newClass,
+			fileFormDataName: 'classList',
+			file: files.classList,
 			url: '/admin/newClass'
 		});
 	};

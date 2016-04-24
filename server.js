@@ -65,24 +65,27 @@ app.use('/signIn', function(req, res, next){
 });*/
 
 //CAS route handlers
+
 app.get('/signIn', cas.bounce, function (req, res, next) {
     console.log('here');
-    req.session.class = req.query.class;
+    console.log(req.query);
+    //req.session.class = req.query.class;
     if (!req.session || !req.session.cas_user) {
-        res.send('/#/');
+        res.redirect('/#/');
     }
     console.log(req.session);
-    if(req.session.cas_user == "RENUSC"){
-        res.send('/#/admin');
+    if(req.session.cas_user == "pl"){
+        res.redirect('/#/admin');
     }
     else{
-        res.send('/#/signIn');
+        res.redirect('/#/signIn');
         next();
     }
 
     console.log('after redirects');
 });
 
+/*
 app.use('/signIn', function(req, res, next){
     if(req.session.cas_user == 'RENUSC'){
         res.status(300).send('/#/admin');
@@ -90,16 +93,13 @@ app.use('/signIn', function(req, res, next){
     else{
         next();
     }
-})
+})*/
 
 //routes
 app.use('/', routes);
 app.use('/admin', admin);
 app.use('/attendance', TA);
 app.use('/signIn', student);
-
-
-
 app.get('/logout', cas.logout);
 
 

@@ -2,6 +2,9 @@ var express = require('express'),
 	router = express.Router(),
 	mongoConnect = require('../mongoConnect.js'),
 	mongo = require('mongodb'),
+	multiparty = require('multiparty'),
+	Converter = require('csvtojson').Converter,
+	converter = new Converter({}),
 	db;
 
 mongoConnect.connect().then(function(){
@@ -12,22 +15,37 @@ var app = express();
 
 //Add a new class
 router.post("/newClass", function(req, res){
-	console.log(req.body);
 	var collection = db.collection('Classes');
-	var semester = collection.find({'semester': req.body.semester, 'className': req.body.className}).toArray(function(err, docs){
-		if(docs.length > 0){
-			res.status(409).send("Class already exists");
-		}
-		else{
-			collection.insert({'semester': req.body.semester, 'className': req.body.className, 'TA': req.body.TARCS, 'startTime' : req.body.startTime, 'days': req.body.days},
-				function(err, result){
-					if(err) throw err;
-					console.log(result);
+	var form = new multiparty.Form();
+	form.parse(req, function(err, fields, files){
+		var semester = collection.find({'semester': fields.semester[0], 'className': fields.className[0]}).toArray(function(err, docs){
+			if(docs.length > 0){
+				res.status(409).send("Class already exists");
+			}
+			else{
+				if(Object.keys(files).length == 0){
+					console.log('no files');
+					collection.insert({'semester': fields.semester[0], 'className': fields.className[0], 'TA': fields.TARCS[0], 'startTime' : fields.startTime[0], 'days': fields.days[0]},
+						function(err, result){
+							if(err) throw err;
+							res.json({'Success': 'Class added without students'});
+							res.end();
+						}
+					);
 				}
-			);
-			res.json({'Success': 'Class added'});
-			res.end();
-		}
+				else{
+					converter.fromFile(files.file[0].path, function(err, results){
+						collection.insert({'semester': fields.semester[0], 'className': fields.className[0], 'TA': fields.TARCS[0], 'startTime' : fields.startTime[0], 'days': fields.days[0], 'classList': results},
+							function(err, result){
+								if(err) throw err;
+								res.json({'Success': 'Class added'});
+								res.end();
+							}
+						);
+					});
+				}
+			}
+		});
 	});
 });
 

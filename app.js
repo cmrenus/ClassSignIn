@@ -1,22 +1,26 @@
-var app = angular.module('ClassSignIn', ['ngRoute', 'ui.bootstrap', 'ngFileUpload', 'geolocation']);
+var app = angular.module('ClassSignIn', ['ngRoute', 'ui.bootstrap', 'ngFileUpload', 'geolocation', 'ngCookies']);
 
 app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
 	$routeProvider.
 	when('/', {
 		templateUrl: 'client/views/home.html',
-		controller: 'homeCtrl'
+		controller: 'homeCtrl',
+		access: {restricted: false}
 	}).
 	when('/admin',{
 		templateUrl: 'client/views/adminForm.html',
-		controller: 'adminCtrl'
+		controller: 'adminCtrl',
+		access: {restricted: "admin"}
 	}).
 	when('/signIn', {
 		templateUrl: 'client/views/studentCheck.html',
-		controller: 'studentCheckCtrl'
+		controller: 'studentCheckCtrl',
+		access: {restricted: true}
 	}).
 	when('/TA', {
 		templateUrl: 'client/views/TAPage.html',
-		controller: 'TACtrl'
+		controller: 'TACtrl',
+		access: {restricted: "TA"}
 	}).
 	otherwise({
 		redirectTo:'/'
@@ -24,3 +28,12 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
 	//$locationProvider.html5Mode(true);
 }]);
+
+/*
+app.run(['$rootScope', '$location', '$route', 'AuthService', function ($rootScope, $location, $route, AuthService) {
+  $rootScope.$on('$routeChangeStart', function (event, next, current) {
+    if (next.$$route != undefined && next.$$route.access.restricted && (AuthService.getUserStatus() == undefined || AuthService.getUserStatus() == '')) {
+      $location.path('/');
+    }
+  });
+}]);*/
