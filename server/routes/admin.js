@@ -1,31 +1,26 @@
 var express = require('express'),
 	router = express.Router(),
-	mongoConnect = require('../mongoConnect.js'),
-	mongo = require('mongodb'),
 	multiparty = require('multiparty'),
 	Converter = require('csvtojson').Converter,
 	converter = new Converter({}),
-	db;
-
-mongoConnect.connect().then(function(){
-	db = mongoConnect.db;
-});
+	mongo = require('mongodb'),
+	db = require('../db');
 
 var app = express();
 
 //Add a new class
 router.post("/newClass", function(req, res){
-	var collection = db.collection('Classes');
+	var collection = db.get().collection('Classes');
 	var form = new multiparty.Form();
 	form.parse(req, function(err, fields, files){
-		var semester = collection.find({'semester': fields.semester[0], 'className': fields.className[0]}).toArray(function(err, docs){
+		var semester = collection.find({'semester': fields.semester[0], 'className': fields.className[0], 'section' : fields.section[0]}).toArray(function(err, docs){
 			if(docs.length > 0){
 				res.status(409).send("Class already exists");
 			}
 			else{
 				if(Object.keys(files).length == 0){
 					console.log('no files');
-					collection.insert({'semester': fields.semester[0], 'className': fields.className[0], 'TA': fields.TARCS[0], 'startTime' : fields.startTime[0], 'days': fields.days[0]},
+					collection.insert({'semester': fields.semester[0], 'className': fields.className[0], 'section': fields.section[0], 'TA': fields.TARCS[0], 'startTime' : fields.startTime[0], 'days': fields.days[0]},
 						function(err, result){
 							if(err) throw err;
 							res.json({'Success': 'Class added without students'});
@@ -35,7 +30,7 @@ router.post("/newClass", function(req, res){
 				}
 				else{
 					converter.fromFile(files.file[0].path, function(err, results){
-						collection.insert({'semester': fields.semester[0], 'className': fields.className[0], 'TA': fields.TARCS[0], 'startTime' : fields.startTime[0], 'days': fields.days[0], 'classList': results},
+						collection.insert({'semester': fields.semester[0], 'className': fields.className[0], 'section': fields.section[0], 'TA': fields.TARCS[0], 'startTime' : fields.startTime[0], 'days': fields.days[0], 'classList': results},
 							function(err, result){
 								if(err) throw err;
 								res.json({'Success': 'Class added'});
@@ -52,7 +47,7 @@ router.post("/newClass", function(req, res){
 //change the current semester
 router.post("/changeSemester", function(req, res){
 	console.log(req.body);
-	var collection = db.collection('Current');
+	var collection = db.get().collection('Current');
 	collection.find().toArray(function(err, docs){
 		if (err) throw err;
 		console.log(docs[0]);
@@ -66,7 +61,7 @@ router.post("/changeSemester", function(req, res){
 });
 
 router.post("/addStudent", function(req, res){
-	var collection = db.collection('Classes');
+	var collection = db.get().collection('Classes');
 	var student = req.body.student;
 	collection.update({'_id': new mongo.ObjectId(req.body.classID)}, {$push: {classList: {rcs: student.rcs, firstName: student.firstName, lastName: student.lastName}}},function(err){
 		if(err) res.send(err);
@@ -75,7 +70,7 @@ router.post("/addStudent", function(req, res){
 });
 
 router.post("/editClass", function(req, res){
-	var collection = db.collection('Classes');
+	var collection = db.get().collection('Classes');
 	console.log(req.body);
 	collection.update({'_id': new mongo.ObjectId(req.body._id)}, {$set: {startTime: req.body.startTime, TA: req.body.TA, days: req.body.days}}, function(err){
 		if(err) res.send(err);
@@ -85,7 +80,7 @@ router.post("/editClass", function(req, res){
 
 //retrieve the current semester
 router.get('/currentSemester', function(req, res){
-	var collection = db.collection('Current');
+	var collection = db.get().collection('Current');
 	collection.find().toArray(function(err, docs){
 		if (err) throw err;
 		res.send(docs[0].semester);
@@ -95,7 +90,7 @@ router.get('/currentSemester', function(req, res){
 
 //get list of all semesters
 router.get("/semesters", function(req, res){
-	var collection = db.collection('Classes');
+	var collection = db.get().collection('Classes');
 	collection.distinct('semester', function(err, docs){
 		if(err) throw err;
 		res.send(docs);
@@ -104,8 +99,8 @@ router.get("/semesters", function(req, res){
 
 //get list of class choices based on semester
 router.get("/classList", function(req, res){
-	var collection = db.collection('Classes');
-	collection.find({'semester': req.query.semester}, {'className': 1}).toArray(function(err, docs){
+	var collection = db.get().collection('Classes');
+	collection.find({'semester': req.query.semester}, {'className': 1, 'section': 1}).sort({className: 1, section: 1}).toArray(function(err, docs){
 		if(err) throw err;
 		res.send(docs);
 	});
@@ -113,17 +108,18 @@ router.get("/classList", function(req, res){
 
 
 router.get('/classInfo', function(req, res){
-	var collection = db.collection('Classes');
+	var collection = db.get().collection('Classes');
 	console.log(req.query);
 	collection.find({'_id': new mongo.ObjectId(req.query.classID)}).toArray(function(err, docs){
 		if(err) throw err;
+		console.log(docs[0]);
 		res.send(docs[0]);
 	});
 });
 
 
 router.delete('/deleteStudent', function(req, res){
-	var collection = db.collection('Classes');
+	var collection = db.get().collection('Classes');
 	console.log(req.query);
 	collection.update({'_id': new mongo.ObjectId(req.query.classID)}, {$pull: {classList: {rcs: req.query.rcs}}}, function(err){
 		if(err) throw err;

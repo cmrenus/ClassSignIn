@@ -27,9 +27,9 @@ angular.module('ClassSignIn')
 	            controller: ['$scope', function(scope) {
 	                scope.cancel = $scope.cancel;
 	                scope.title = "Add Class";
-	              	scope.body = "Class " + $scope.newClass.semester + " " + $scope.newClass.className + " was added";
+	              	scope.body = "Class " + $scope.newClass.semester + " " + $scope.newClass.className + " " + $scope.newClass.section + " was added";
 	            	$scope.newClass = {};
-	            	$scopes.files = {};
+	            	$scope.files = {};
 	            }]
 	        });
 	        //$scope.newClass = undefined;

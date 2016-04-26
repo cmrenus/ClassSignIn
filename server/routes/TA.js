@@ -1,16 +1,11 @@
 var express = require('express'),
 	router = express.Router(),
 	dateFormat = require('dateformat'),
-	mongoConnect = require('../mongoConnect.js'),
-	mongo = require('mongodb'),
 	q = require('q'),
-	db;
+	mongo = require('mongodb'),
+	db = require('../db');
 
 dateFormat.masks.format = 'mm-dd-yyyy';
-
-mongoConnect.connect().then(function(){
-	db = mongoConnect.db;
-});
 
 var app = express();
 
@@ -34,7 +29,7 @@ router.get("/byDate", function(req, res){
 	//console.log(req.query);
 	var date = dateFormat(req.query.date, 'format');
 	//console.log(date);
-	var collection = db.collection('Attendance');
+	var collection = db.get().collection('Attendance');
 	collection.aggregate(
 		[{$match: {classID: req.query.classID, 'attendance.date': date}}, 
 		 {$project: {
@@ -55,7 +50,7 @@ router.get("/byDate", function(req, res){
 		else{
 			var inClass = docs[0].attendance;
 			console.log(inClass);
-			db.collection('Classes').find({'_id': new mongo.ObjectId(req.query.classID)}, {"classList": 1, _id: 0}).toArray(function(err, docs){
+			db.get().collection('Classes').find({'_id': new mongo.ObjectId(req.query.classID)}, {"classList": 1, _id: 0}).toArray(function(err, docs){
 				if(err) throw err;
 				//$scope.inClass.map(function(e){return e.rcs}).indexOf(student.rcs)
 				createAttendanceList(inClass, docs[0].classList).then(function(data){
@@ -71,7 +66,7 @@ router.get("/byDate", function(req, res){
 
 router.get('/byStudent', function(req, res){
 	console.log(req.query);
-	db.collection('Attendance').aggregate(
+	db.get().collection('Attendance').aggregate(
 		[{$match: {classID: req.query.classID, 'attendance.rcs': req.query.rcs}},
 		 {$project: {
 		 	_id: 0,

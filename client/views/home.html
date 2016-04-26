@@ -4,7 +4,7 @@
 			<label for="classSelect">Please Select Class to Sign into</label><br>
 		    <select ng-show="classes" name="classSelect" id="classSelect" ng-model="classSelect">
 		      <option value="">---Please select---</option>
-		      <option ng-repeat="class in classes" value="{{class._id}}">{{class.className}}</option> 
+		      <option ng-repeat="class in classes" value="{{class._id}}">{{class.className + " " + class.section}}</option> 
 		    </select><br><br>
 			<button class="btn btn-lg btn-danger btn-block" ng-click="login()" ng-disabled="!classSelect">
 				<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Sign in

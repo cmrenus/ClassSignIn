@@ -6,14 +6,7 @@ var path = require('path'),
 	express = require('express'),
     port = 8005,
     app = express(),
-    mongoConnect = require('./server/mongoConnect'),
-    db;
-
-
-mongoConnect.connect().then(function() {
-    //maybe some additional logic if need by when mongo connects
-    db = mongoConnect.db;
-});
+    db = require('./server/db');
 
 
 //routes
@@ -67,8 +60,6 @@ app.use('/signIn', function(req, res, next){
 //CAS route handlers
 
 app.get('/signIn', cas.bounce, function (req, res, next) {
-    console.log('here');
-    console.log(req.query);
     //req.session.class = req.query.class;
     if (!req.session || !req.session.cas_user) {
         res.redirect('/#/');
@@ -104,6 +95,13 @@ app.get('/logout', cas.logout);
 
 
 
-
-app.listen(port);
-console.log('Server running on port ' + port + '.');
+db.connect('mongodb://localhost:27017/ClassSignIn', function(err) {
+  if (err) {
+    console.log('Unable to connect to Mongo.')
+    process.exit(1)
+  } else {
+    app.listen(port, function() {
+      console.log('Server running on port ' + port + '.')
+    })
+  }
+});
