@@ -8,7 +8,7 @@
 				<label for="date.classSelect">Please Select a Class</label><br>
 				<select name="date.classSelect" id="date.classSelect" ng-model="date.classSelect">
 					<option value="">---Please select---</option>
-					<option ng-repeat="class in classes" value="{{class._id}}">{{class.className}}</option>
+					<option ng-repeat="class in classes" value="{{class._id}}">{{class.className + " " + class.section}}</option>
 				</select>
 				<h4 ng-show="date.classSelect">Calender</h4>
 				<div ng-show="date.classSelect" style="display:inline-block; min-height:290px;">
@@ -42,9 +42,9 @@
 			<label for="date.classSelectStudent">Please Select a Class</label><br>
 			<select name="date.classSelectStudent" id="date.classSelectStudent" ng-change="getStudents(date.classSelectStudent); studentSelect=''" ng-model="date.classSelectStudent" ng-init="date.classSelectStudent=''">
 				<option value="">---Please select---</option>
-				<option ng-repeat="class2 in classes2" value="{{class2._id}}">{{class2.className}}</option>
+				<option ng-repeat="class2 in classes2" value="{{class2._id}}">{{class2.className + " " + class2.section}}</option>
 			</select><br>
-			<label ng-show="classList2" for="studentAttendance">Please Select a Class</label><br>
+			<label ng-show="classList2" for="studentAttendance">Please Select a Student</label><br>
 			<select ng-show="classList2" name="studentSelect" id="studentSelect" ng-model="studentSelect" ng-change="getAttendanceByStudent(studentSelect, date.classSelectStudent)" ng-init="studentSelect=''">
 				<option value="">---Please Select---</option>
 				<option ng-repeat="student2 in classList2" value="{{student2.rcs}}">{{student2.rcs}}</option>

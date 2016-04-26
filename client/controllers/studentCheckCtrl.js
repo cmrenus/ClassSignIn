@@ -9,13 +9,15 @@ angular.module('ClassSignIn')
 				console.log(data.data);
 				$window.location = data.data;
 			}*/
+			swal("Success!", data.data, "success");
 			console.log(data);
 		},
 		function(err){
 			/*if(err.status == 300){
 				$window.location = err.data
 			}*/
-			errorModal(err.data);
+			swal("Error Logging in!", err.data, "error");
+			//errorModal(err.data);
 			console.log(err);
 		});
 	});

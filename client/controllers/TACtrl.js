@@ -14,10 +14,12 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
       $scope.classes2 = res.data;
 		},
 		function(err){
-			errorModal(err.data);
+      sswal("Oops..", "Classes could not be retrieved", "error");
+			//errorModal(err.data);
 		});
 	},function(err){
-		errorModal(err.data);
+    swal("Oops..", "Semester could not be retrieved", "error");
+		//errorModal(err.data);
 	});
 
   $scope.$watchGroup(['date.dt', 'date.classSelect'], function(newValues, oldValues){
@@ -121,7 +123,8 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
       }
   	},
   	function(err){
-  		errorModal(err.data);
+      swal("Oops..", "Attendance could not be retrieved", "error");
+  		//errorModal(err.data);
   	});
   };
 
@@ -134,7 +137,8 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
       $scope.noDates = undefined;
     },
     function(err){
-      errorModal(err.data);
+      swal("Oops..", "Students could not be retrieved", "error");
+      //errorModal(err.data);
     });
   };
 
@@ -154,7 +158,8 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
         
       },
       function(err){
-        errorModal(err.data);
+        swal("Oops..", "Attendance could not be retrieved", "error");
+        //errorModal(err.data);
       });
     }
     else{

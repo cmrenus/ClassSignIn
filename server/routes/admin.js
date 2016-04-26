@@ -30,13 +30,19 @@ router.post("/newClass", function(req, res){
 				}
 				else{
 					converter.fromFile(files.file[0].path, function(err, results){
-						collection.insert({'semester': fields.semester[0], 'className': fields.className[0], 'section': fields.section[0], 'TA': fields.TARCS[0], 'startTime' : fields.startTime[0], 'days': fields.days[0], 'classList': results},
-							function(err, result){
-								if(err) throw err;
-								res.json({'Success': 'Class added'});
-								res.end();
-							}
-						);
+						console.log(results);
+						if(results == undefined || results[0].rcs == undefined || results[0].firstName == undefined || results[0].lastName == undefined){
+							res.status(400).send('CSV file not formatted correctly');
+						}
+						else{
+							collection.insert({'semester': fields.semester[0], 'className': fields.className[0], 'section': fields.section[0], 'TA': fields.TARCS[0], 'startTime' : fields.startTime[0], 'days': fields.days[0], 'classList': results},
+								function(err, result){
+									if(err) throw err;
+									res.json({'Success': 'Class added'});
+									res.end();
+								}
+							);
+						}
 					});
 				}
 			}

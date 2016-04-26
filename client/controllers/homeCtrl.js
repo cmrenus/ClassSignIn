@@ -8,10 +8,12 @@ angular.module('ClassSignIn')
 			$scope.classes = res2.data;
 		},
 		function(err){
+			sweetAlert("Oops..", err.data, "error");
 			console.log(err);
 		});
 	},
 	function(err){
+		sweetAlert("Oops..", err.data, "error");
 		console.log(err);
 	});
 
@@ -24,6 +26,7 @@ angular.module('ClassSignIn')
 			console.log(data.data);
 			$window.location = data.data;
 		}).catch(function(err){
+			sweetAlert("Oops..", err.data, "error");
 			console.log(err);
 		});
 	};
