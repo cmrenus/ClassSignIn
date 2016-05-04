@@ -81,7 +81,7 @@ router.post('/', function(req,res){
 				}
 				else{
 					console.log("Not in the classroom");
-					res.status(400).send("You are not in the classroom");
+					res.status(400).send("<p class='text-warning'>You are not in the classroom</p><small class='text-info'>Tip!:If you are in the classroom disconnect your wifi and reconnect.</small></br><small class='text-info'>Tip!: You can also use your phone which may be more accurate!</small>");
 				}
 			}
 			else{
@@ -91,6 +91,30 @@ router.post('/', function(req,res){
 		}
 	});
 
+});
+
+router.get('/byStudent', function(req, res){
+	db.get().collection('Attendance').aggregate(
+		[{$match: {classID: ObjectID.createFromHexString(req.cookies.class), 'attendance.rcs': req.session.cas_user.toLowerCase()}},
+		 {$project: {
+		 	_id: 0,
+		 	attendance: {
+		 		$filter: {
+		 			input: '$attendance', 
+		 			as: 'item', 
+		 			cond: {$eq: ['$$item.rcs', req.session.cas_user.toLowerCase()]}
+		 		}
+		 	}
+		 }},
+		 ]).toArray(function(err, docs){
+		 	if(err) throw err;
+		 	if(docs[0] == undefined){
+		 		res.status(204).send('No Attendance');
+		 	}
+		 	else{
+				res.send(docs[0].attendance);
+			}
+		});
 });
 
 

@@ -1,3 +1,24 @@
-<div>
-	<h1>Signing In...</h1>
+<div class="container-fluid text-center">
+	<div ng-show="dates" class="container">
+		<ul>
+			<li ng-repeat="date in dates">
+				{{date.date}}
+			</li>
+		</ul>
+		<table ng-show="classList" class="table table-striped">
+	        <thead><tr>
+	          <th>Date</th>
+	          <th>Present</th>
+	        </tr></thead>
+	        <tbody>
+	          <tr ng-repeat="date in dates">
+	            <td>{{date.date}}</td>
+	            <td ng-switch="{{student.present}}">
+	            	<img ng-switch-when="true" width="20px" ng-src="resources/images/greenCheck.png">
+					<img ng-switch-when="undefined" width="20px" ng-src="resources/images/redCross.png">
+	            </td>
+	          </tr>
+	        </tbody>
+	    </table>
+	</div>
 </div>

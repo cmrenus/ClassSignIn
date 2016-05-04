@@ -3,6 +3,7 @@ angular.module('ClassSignIn')
 
 	geolocation.getLocation().then(function(data){
 		console.log(data.coords);
+		swal("Logging In!");
 		adminService.signIn(data).then(function(data){
 			/*console.log(data.status);
 			if(data.status == 300){
@@ -16,23 +17,14 @@ angular.module('ClassSignIn')
 			/*if(err.status == 300){
 				$window.location = err.data
 			}*/
-			swal("Error Logging in!", err.data, "error");
+			swal({
+				title: "Error Logging in!", 
+				text: err.data, 
+				type: "error",
+				html: true
+			});
 			//errorModal(err.data);
 			console.log(err);
 		});
 	});
-
-
-	errorModal = function(error){
-    	$scope.modalInstance = $modal.open({
-            animation: $scope.animationsEnabled,
-            templateUrl: 'client/views/alert.html',
-            controller: ['$scope', function(scope) {
-                scope.cancel = $scope.cancel;
-                scope.title = "Error";
-                scope.body = error;
-            }]
-        });
-  	};
-
 }]);

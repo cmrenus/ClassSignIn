@@ -167,17 +167,4 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
       $scope.dates = undefined;
     }
   };
-
-
-  errorModal = function(error){
-    $scope.modalInstance = $modal.open({
-          animation: $scope.animationsEnabled,
-          templateUrl: 'client/views/alert.html',
-          controller: ['$scope', function(scope) {
-              scope.cancel = $scope.cancel;
-              scope.title = "Error";
-              scope.body = error;
-          }]
-      });
-  };
 }]);
