@@ -56,12 +56,20 @@ router.post("/changeSemester", function(req, res){
 	var collection = db.get().collection('Current');
 	collection.find().toArray(function(err, docs){
 		if (err) throw err;
-		console.log(docs[0]);
-		collection.updateOne({"_id": docs[0]._id}, {$set: {'semester': req.body.semester}},function(err, docs){
-			console.log(docs);
-			res.json({'Success': 'Semester Changed'});
-			res.end();
-		});
+		if(docs[0] == undefined){
+			res.status(400).send('An error has occurred');
+		}
+		else{
+			if(docs[0]._id == ''){
+				res.status(400).send('You cannot do that');
+			}
+			else{
+				collection.updateOne({"_id": docs[0]._id}, {$set: {'semester': req.body.semester}},function(err, docs){
+					res.json({'Success': 'Semester Changed'});
+					res.end();
+				});
+			}
+		}
 	});
 
 });
@@ -89,7 +97,13 @@ router.get('/currentSemester', function(req, res){
 	var collection = db.get().collection('Current');
 	collection.find().toArray(function(err, docs){
 		if (err) throw err;
-		res.send(docs[0].semester);
+		if(docs[0] == undefined){
+			res.send('');
+		}
+		else{
+			res.send(docs[0].semester);
+		}
+		
 	});
 	
 });

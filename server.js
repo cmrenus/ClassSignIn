@@ -6,8 +6,20 @@ var path = require('path'),
 	express = require('express'),
     port = 8005,
     app = express(),
-    db = require('./server/db');
+    db = require('./server/db'),
+    dbURI = 'mongodb://localhost:27017/ClassSignIn',
+    MongoDBStore = require('connect-mongodb-session')(session),
+    store = new MongoDBStore({
+        uri: dbURI,
+        collection: 'mySessions'
+    });
 
+
+// Catch errors 
+store.on('error', function(error) {
+  assert.ifError(error);
+  assert.ok(false);
+});
 
 //routes
 var routes = require('./server/routes/index');
@@ -18,7 +30,6 @@ var student = require('./server/routes/student');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-//app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', express.static(path.join(__dirname, '/')));
 
 app.use(function(req, res, next) {
@@ -32,6 +43,10 @@ app.use(function(req, res, next) {
 // Set up an Express session, which is required for CASAuthentication.
 app.use(session({
     secret: 'super secret key',
+    store: store,
+    cookie: {
+        maxAge: 24 * 60 * 60 * 1000
+    },
     resave: false,
     saveUninitialized: true
 }));
@@ -95,7 +110,7 @@ app.get('/logout', cas.logout);
 
 
 
-db.connect('mongodb://localhost:27017/ClassSignIn', function(err) {
+db.connect(dbURI, function(err) {
   if (err) {
     console.log('Unable to connect to Mongo.')
     process.exit(1)

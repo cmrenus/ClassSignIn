@@ -7,7 +7,7 @@
         <option value="">---Please select---</option>
         <option ng-repeat="semester in semesters" value="{{semester}}">{{semester}}</option>
       </select>
-      <button class="btn btn-success"  ng-click="changeSem(currentSemSelect)" >
+      <button class="btn btn-success"  ng-click="changeSem(currentSemSelect)" ng-disabled="!currentSemSelect">
         <span class="glyphicon glyphicon-save"></span>Submit
       </button>
     </uib-tab>
