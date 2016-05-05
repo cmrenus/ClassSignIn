@@ -118,7 +118,7 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
       }
       else{
     		$scope.classList = res.data.classList;
-    		$scope.inClass = res.data.inClass;
+    		//$scope.inClass = res.data.inClass;
     		$scope.noAttendance = undefined;
       }
   	},

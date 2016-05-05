@@ -94,7 +94,7 @@ router.post('/', function(req,res){
 
 });
 
-createAttendanceList = function(dates, attendance){
+createStudentAttendance = function(dates, attendance){
 	var deferred = q.defer(),
 	index;
 	for(x = 0; x < dates.length; x++){
@@ -146,7 +146,7 @@ router.get('/checkAttendance', function(req, res){
 		 	else{
 		 		db.get().collection('Attendance').distinct("attendance.date", {classID: req.cookies.class}, function(err, results){
 		 			console.log(results);
-		 			createAttendanceList(results, docs[0].attendance).then(function(data){
+		 			createStudentAttendance(results, docs[0].attendance).then(function(data){
 		 				res.send(data);
 		 			})
 		 			//res.send({attendance: docs[0].attendance, dates: results});
