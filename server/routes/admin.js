@@ -148,6 +148,26 @@ router.delete('/deleteStudent', function(req, res){
 
 });
 
+router.post('/addNewClassOption', function(req, res){
+	var collection = db.get().collection('ClassOptions');
+	collection.insert({name: req.body.name}, function(err, results){
+		res.send();
+	});
+});
+
+router.delete('/deleteClassOption', function(req, res){
+	var collection = db.get().collection('ClassOptions');
+	collection.remove({name: req.query.name}, function(err, results){
+		res.send();
+	});
+});
+
+router.get('/classOptions', function(req, res){
+	var collection = db.get().collection('ClassOptions');
+	collection.find().toArray(function(err, docs){
+		res.send(docs);
+	});
+});
 
 
 

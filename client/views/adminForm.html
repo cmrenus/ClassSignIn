@@ -27,10 +27,7 @@
             <div class="col-sm-3">
                 <select name="className" ng-model="newClass.className" required>
                   <option value="">---Please select---</option>
-                  <option value="Intro">Intro To IT</option>
-                  <option value="WebSys">Web Systems</option>
-                  <option value="WebSci">Web Science</option>
-                  <option value="Capstone">Capstone</option>
+                  <option ng-repeat="class in listOfClassOptions" value="{{class.name}}">{{class.name}}</option>
                 </select>
             </div> 
           </div>
@@ -168,6 +165,35 @@
           </tbody>
         </table>
       </div>
+    </uib-tab>
+    <uib-tab heading="Set Classes">
+      <div class="container">
+        <h2 class="title">Edit Class Options</h2>
+        <div class="form-group">
+          <label class="col-sm-3 control-label form-text">New Class: </label>
+          <div class="col-sm-3">
+            <input class="form-control" type="string" ng-model="newClassOption.name" placeholder="Ex. Intro to IT" required>
+          </div>
+        </div>
+        <button class="btn btn-info" ng-click="addNewClassOption(newClassOption.name); newClassOption.name = undefined;">Add!</button>
+        <table class="table table-striped">
+          <thead><tr>
+            <th>Delete</th>
+            <th>Class Name</th>
+          </tr></thead>
+          <tbody>
+            <tr ng-repeat="class in listOfClassOptions">
+              <td>
+                <button class="btn btn-danger" ng-click="deleteClassOption(class.name)">
+                  <span class="glyphicon glyphicon-remove"></span>
+                </button>
+              </td>
+              <td>{{class.name}}</td>
+            </tr>
+          </tbody>
+        </table>   
+      </div> 
+
     </uib-tab>
   </uib-tabset>
 </div>

@@ -2,7 +2,8 @@ var express = require('express'),
 	router = express.Router(),
 	dateFormat = require('dateformat'),
 	mongo = require('mongodb'),
-	db = require('../db');
+	db = require('../db'),
+	q = require('q');
 
 dateFormat.masks.format = 'mm-dd-yyyy';
 
@@ -93,10 +94,40 @@ router.post('/', function(req,res){
 
 });
 
-router.get('/byStudent', function(req, res){
+createAttendanceList = function(dates, attendance){
+	var deferred = q.defer(),
+	index;
+	for(x = 0; x < dates.length; x++){
+		index = attendance.map(function(e) { return e.date; }).indexOf(dates[x]);
+		console.log(index);
+		if(index != -1){
+			attendance[index].present = true;
+		}
+		else{
+			attendance.push({date: dates[x], present: false});
+		}
+		if(x == dates.length - 1){
+			deferred.resolve(attendance);
+		}
+	}
+	return deferred.promise;
+}
+
+router.get('/checkAttendance', function(req, res){
+	console.log('start check');
+	console.log(req.cookies.class);
+	db.get().collection('Attendance').find({classID: req.cookies.class}).toArray(function(err, docs){
+		console.log(docs[0]);;
+	});
 	db.get().collection('Attendance').aggregate(
-		[{$match: {classID: ObjectID.createFromHexString(req.cookies.class), 'attendance.rcs': req.session.cas_user.toLowerCase()}},
-		 {$project: {
+		[
+		{$unwind: '$attendance'},
+		{$match: {classID: req.cookies.class, 'attendance.rcs': req.session.cas_user.toLowerCase()}},
+		{$group: {
+			_id: '$_id',
+			attendance: {$push: '$attendance'}
+		}}
+		 /*{$project: {
 		 	_id: 0,
 		 	attendance: {
 		 		$filter: {
@@ -105,14 +136,22 @@ router.get('/byStudent', function(req, res){
 		 			cond: {$eq: ['$$item.rcs', req.session.cas_user.toLowerCase()]}
 		 		}
 		 	}
-		 }},
+		 }}*/
 		 ]).toArray(function(err, docs){
 		 	if(err) throw err;
+		 	console.log('after aggregate', docs[0]);
 		 	if(docs[0] == undefined){
 		 		res.status(204).send('No Attendance');
 		 	}
 		 	else{
-				res.send(docs[0].attendance);
+		 		db.get().collection('Attendance').distinct("attendance.date", {classID: req.cookies.class}, function(err, results){
+		 			console.log(results);
+		 			createAttendanceList(results, docs[0].attendance).then(function(data){
+		 				res.send(data);
+		 			})
+		 			//res.send({attendance: docs[0].attendance, dates: results});
+		 		})
+				
 			}
 		});
 });

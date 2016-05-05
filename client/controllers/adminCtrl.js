@@ -12,6 +12,11 @@ angular.module('ClassSignIn')
 		//errorModal(err.data);
 	});
 
+	adminService.getClassOptions().then(function(data){
+		$scope.listOfClassOptions = data.data;
+	});
+
+
 	adminService.getCurrentSemester().then(function(res){
 		$scope.currentSem = res.data;
 	},
@@ -208,6 +213,31 @@ angular.module('ClassSignIn')
         	//errorModal(err.data);
         });
     };
+
+
+    $scope.addNewClassOption = function(name){
+    	adminService.addNewClassOption(name).then(function(data){
+    		swal("Added!", "The class, " + name + ", was added as a class option!", "success");
+    		$scope.listOfClassOptions.push({name: name});
+    	},
+    	function(err){
+    		swal("Oops..", err.data, "error");
+    	});
+    };
+
+    $scope.deleteClassOption = function(name){
+    	adminService.deleteClassOption(name).then(function(data){
+    		swal("Deleted!", "The class, " + name + ", was deleted as a class option!", "success");
+    		for(x in $scope.listOfClassOptions){
+    			if($scope.listOfClassOptions[x].name == name){
+    				$scope.listOfClassOptions.splice(x, 1);
+    			}
+    		}
+    	},
+    	function(err){
+    		swal("Oops..", err.data, "error");
+    	});
+    }
     /*
     errorModal = function(error){
     	$scope.modalInstance = $modal.open({

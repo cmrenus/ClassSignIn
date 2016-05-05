@@ -27,4 +27,24 @@ angular.module('ClassSignIn')
 			console.log(err);
 		});
 	});
+
+	getAttendance = function(){
+		$http({
+			method: 'GET',
+			url: '/signIn/checkAttendance'
+		}).then(function(data){
+			$scope.dates = data.data;
+			console.log(data);
+		}).catch(function(err){
+			swal({
+				title: "Oops...",
+				text: err.data,
+				type:"error"
+			});
+		});
+	}
+
+	getAttendance();
+
+
 }]);

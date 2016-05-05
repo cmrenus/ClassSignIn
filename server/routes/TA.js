@@ -13,7 +13,7 @@ createAttendanceList = function(inClass, classList){
 	var deferred = q.defer(),
 	index;
 	for(x = 0; x < inClass.length; x++){
-		index = classList.map(function(e) { return e.rcs; }).indexOf(inClass[x].rcs)
+		index = classList.map(function(e) { return e.rcs; }).indexOf(inClass[x].rcs);
 		if(index != -1){
 			classList[index].present = true;
 		}

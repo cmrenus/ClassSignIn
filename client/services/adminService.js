@@ -92,4 +92,25 @@ angular.module('ClassSignIn')
 		});
 	};
 
+	this.addNewClassOption = function(name){
+		return $http({
+			method: 'POST',
+			url: 'admin/addNewClassOption',
+			data: {name: name}
+		});
+	};
+
+	this.deleteClassOption = function(name){
+		return $http({
+			method: 'DELETE',
+			url: 'admin/deleteClassOption?name=' + name
+		})
+	}
+
+	this.getClassOptions = function(){
+		return $http({
+			method: 'GET',
+			url: 'admin/classOptions'
+		});
+	};
 }]);
