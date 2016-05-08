@@ -5,6 +5,10 @@ angular.module('ClassSignIn')
       return $cookies.get('user');
     }
 
+    function getUserType() {
+      return $cookies.get('type');
+    }
+
     function logout(){
       $http({
         method: 'GET',
@@ -12,6 +16,7 @@ angular.module('ClassSignIn')
       })
       .then(function(data){
         $cookies.remove('user');
+        $cookies.remove('type');
         $window.location = data.data;
       },
       function(err){
@@ -22,6 +27,7 @@ angular.module('ClassSignIn')
     // return available functions for use in controllers
     return ({
       getUserStatus: getUserStatus,
-      logout: logout
+      logout: logout,
+      getUserType: getUserType
     });
 }]);

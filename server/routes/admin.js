@@ -8,6 +8,41 @@ var express = require('express'),
 
 var app = express();
 
+//get list of class choices based on semester
+router.get("/classList", function(req, res){
+	var collection = db.get().collection('Classes');
+	collection.find({'semester': req.query.semester}, {'className': 1, 'section': 1}).sort({className: 1, section: 1}).toArray(function(err, docs){
+		if(err) throw err;
+		res.send(docs);
+	});
+});
+
+//retrieve the current semester
+router.get('/currentSemester', function(req, res){
+	var collection = db.get().collection('Current');
+	collection.find().toArray(function(err, docs){
+		if (err) throw err;
+		if(docs[0] == undefined){
+			res.send('');
+		}
+		else{
+			res.send(docs[0].semester);
+		}
+	});
+});
+
+
+router.use('*', function(req, res, next){
+	console.log(req.session, req.cookies);
+	if((req.session == undefined || req.session.cas_user == undefined) || (req.session.cas_user != req.cookies.user && req.cookies.type != 'admin')){
+		res.status(403).send('Forbidden');
+	}
+	else{
+		console.log('here?');
+		next();
+	}
+});
+
 //Add a new class
 router.post("/newClass", function(req, res){
 	var collection = db.get().collection('Classes');
@@ -90,21 +125,7 @@ router.post("/editClass", function(req, res){
 	})
 });
 
-//retrieve the current semester
-router.get('/currentSemester', function(req, res){
-	var collection = db.get().collection('Current');
-	collection.find().toArray(function(err, docs){
-		if (err) throw err;
-		if(docs[0] == undefined){
-			res.send('');
-		}
-		else{
-			res.send(docs[0].semester);
-		}
-		
-	});
-	
-});
+
 
 //get list of all semesters
 router.get("/semesters", function(req, res){
@@ -115,14 +136,7 @@ router.get("/semesters", function(req, res){
 	});
 });
 
-//get list of class choices based on semester
-router.get("/classList", function(req, res){
-	var collection = db.get().collection('Classes');
-	collection.find({'semester': req.query.semester}, {'className': 1, 'section': 1}).sort({className: 1, section: 1}).toArray(function(err, docs){
-		if(err) throw err;
-		res.send(docs);
-	});
-});
+
 
 
 router.get('/classInfo', function(req, res){

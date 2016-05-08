@@ -62,20 +62,28 @@ var cas = new CASAuthentication({
 //CAS route handlers
 
 app.get('/signIn', cas.bounce, function (req, res, next) {
-    //req.session.class = req.query.class;
     if (!req.session || !req.session.cas_user) {
         res.redirect('/#/');
     }
     console.log(req.session);
-    if(req.session.cas_user == "pl"){
+    res.cookie('user', req.session.cas_user);
+    if(req.session.cas_user == "RENUSC"){
+        res.cookie('type', 'admin');
         res.redirect('/#/admin');
     }
     else{
-        res.redirect('/#/signIn');
-        next();
+        db.get().collection('Classes').find({TA: req.session.cas_user.toLowerCase()}).toArray(function(err, docs){
+            if(docs.length > 0){
+                res.cookie('type', 'TA');
+                res.redirect('/#/TA');
+            }
+            else{
+                res.cookie('type', 'student');
+                res.redirect('/#/signIn');
+                next();
+            }
+        })
     }
-
-    console.log('after redirects');
 });
 
 //routes

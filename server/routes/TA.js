@@ -24,6 +24,15 @@ createAttendanceList = function(inClass, classList){
 	return deferred.promise;
 }
 
+router.use('*', function(req, res, next){
+	console.log(req.session, req.cookies);
+	if((req.session == undefined || req.session.cas_user == undefined) && req.session.cas_user != req.cookies.user && (req.cookies.type != 'TA' || req.cookies.type != 'admin')){
+		res.status(403).send('Forbidden');
+	}
+	else{
+		next();
+	}
+});
 
 router.get("/byDate", function(req, res){
 	var date = dateFormat(req.query.date, 'format');

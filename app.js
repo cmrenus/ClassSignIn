@@ -10,28 +10,36 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 	when('/admin',{
 		templateUrl: 'client/views/adminForm.html',
 		controller: 'adminCtrl',
-		access: {restricted: "admin"}
+		access: {restricted: true, type: 'admin'}
 	}).
 	when('/signIn', {
 		templateUrl: 'client/views/studentCheck.html',
 		controller: 'studentCheckCtrl',
-		access: {restricted: 'student'}
+		access: {restricted: true, type: 'student'}
 	}).
 	when('/TA', {
 		templateUrl: 'client/views/TAPage.html',
 		controller: 'TACtrl',
-		access: {restricted: "TA"}
+		access: {restricted: true, type: 'TA'}
 	}).
+	when('/logout', {
+		
+	})
 	otherwise({
 		redirectTo:'/'
 	});
 }]);
 
-/*
 app.run(['$rootScope', '$location', '$route', 'AuthService', function ($rootScope, $location, $route, AuthService) {
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
-    if (next.$$route != undefined && next.$$route.access.restricted && (AuthService.getUserStatus() == undefined || AuthService.getUserStatus() == '')) {
-      $location.path('/');
+  	console.log(next.$$route != undefined && next.$$route.access != undefined && next.$$route.access.restricted && (next.$$route.access.type == AuthService.getUserType() || (next.$$route.access.type == 'TA' && AuthService.getUserType() == 'admin')))
+  	//console.log((next.$$route != undefined && next.$$route.access != undefined && next.$$route.access.restricted != undefined && (next.$$route.access.restricted == AuthService.getUserType() || (next.$$route.access.restricted == 'TA' && AuthService.getUserType() == 'admin'))));
+  	//console.log(next.$$route != undefined, next.$$route.access != undefined, next.$$route.access.restricted != undefined, (next.$$route.access.restricted == AuthService.getUserType() || (next.$$route.access.restricted == 'TA' && AuthService.getUserType() == 'admin')));
+    if (next.$$route != undefined && next.$$route.access != undefined && next.$$route.access.restricted && (next.$$route.access.type == AuthService.getUserType() || (next.$$route.access.type == 'TA' && AuthService.getUserType() == 'admin'))) {
+      //$location.path('/');
+    }
+    else{
+    	$location.path('/');
     }
   });
-}]);*/
+}]);

@@ -30,68 +30,83 @@ function checkLocation(coords){
 	}
 }
 
+router.use('*', function(req, res, next){
+	console.log(req.session, req.cookies);
+	if((req.session == undefined || req.session.cas_user == undefined) && req.session.cas_user != req.cookies.user && req.cookies.type != 'student'){
+		res.status(403).send('Forbidden');
+	}
+	else{
+		console.log('here?');
+		next();
+	}
+});
+
 
 router.post('/', function(req,res){
-	var classes = db.get().collection('Classes');
-	var attendance = db.get().collection('Attendance');
-	var rcs = req.session.cas_user.toLowerCase();
-	var date = dateFormat(req.body.time, 'format');
-	classes.find({_id: new mongo.ObjectId(req.cookies.class), 'classList.rcs': rcs}, {'classList.rcs': 1, startTime: 1, days: 1}).toArray(function(err, docs){
-		if(err) throw err;
-		if(docs.length == 0){
-			//return err, not in class
-			console.log("not in this class");
-			res.status(400).send('You are not in this class');
-		}
-		else{
-			console.log("in this class");
-			var currentHours = new Date(docs[0].startTime).getHours()
-			var d = new Date();
-			if(docs[0].days.indexOf(weekday[d.getDay()]) > -1 && (d.getHours() - currentHours < 2 && d.getHours() - currentHours >= 0)){
-				console.log("Correct Time");
-				if(checkLocation(req.body.coords)){
-					attendance.aggregate([
-						{$match: {classID: req.cookies.class, 'attendance.rcs': rcs}},
-						{$project: {
-							attendance:{
-								$filter: {
-									input: '$attendance', 
-				 					as: 'item', 
-				 					cond: {$and:[{$eq: ['$$item.date', date]}, {$eq: ['$$item.rcs', rcs]}]}
-								}
-							}
-						}}
-					]).toArray(function(err,docs){
-						if(err) throw err;
-
-						if(docs.length == 0){
-							//not signed in
-							console.log("not signed in");
-							attendance.update({'classID': req.cookies.class}, {$push: {attendance: {rcs:rcs, date: date}}}, function(err, docs){
-								if(err) throw err;
-								res.send(docs);
-							});
-							
-						}
-						else{
-							res.status(400).send('You have already signed in today');
-							console.log('already signed in');
-							//already signed in
-						}
-					});
-				}
-				else{
-					console.log("Not in the classroom");
-					res.status(400).send("<p class='text-warning'>You are not in the classroom</p><small class='text-info'>Tip!:If you are in the classroom disconnect your wifi and reconnect.</small></br><small class='text-info'>Tip!: You can also use your phone which may be more accurate!</small>");
-				}
+	if(req.session == undefined || req.session.cas_user == undefined){
+		res.status(403).send('Forbidden');
+	}
+	else{
+		var classes = db.get().collection('Classes');
+		var attendance = db.get().collection('Attendance');
+		var rcs = req.session.cas_user.toLowerCase();
+		var date = dateFormat(req.body.time, 'format');
+		classes.find({_id: new mongo.ObjectId(req.cookies.class), 'classList.rcs': rcs}, {'classList.rcs': 1, startTime: 1, days: 1}).toArray(function(err, docs){
+			if(err) throw err;
+			if(docs.length == 0){
+				//return err, not in class
+				console.log("not in this class");
+				res.status(400).send('You are not in this class');
 			}
 			else{
-				console.log("Not Time for class");
-				res.status(400).send("It is not time for class yet");
-			}
-		}
-	});
+				console.log("in this class");
+				var currentHours = new Date(docs[0].startTime).getHours()
+				var d = new Date();
+				if(docs[0].days.indexOf(weekday[d.getDay()]) > -1 && (d.getHours() - currentHours < 2 && d.getHours() - currentHours >= 0)){
+					console.log("Correct Time");
+					if(checkLocation(req.body.coords)){
+						attendance.aggregate([
+							{$match: {classID: req.cookies.class, 'attendance.rcs': rcs}},
+							{$project: {
+								attendance:{
+									$filter: {
+										input: '$attendance', 
+					 					as: 'item', 
+					 					cond: {$and:[{$eq: ['$$item.date', date]}, {$eq: ['$$item.rcs', rcs]}]}
+									}
+								}
+							}}
+						]).toArray(function(err,docs){
+							if(err) throw err;
 
+							if(docs.length == 0){
+								//not signed in
+								console.log("not signed in");
+								attendance.update({'classID': req.cookies.class}, {$push: {attendance: {rcs:rcs, date: date}}}, function(err, docs){
+									if(err) throw err;
+									res.send(docs);
+								});
+								
+							}
+							else{
+								res.status(400).send('You have already signed in today');
+								console.log('already signed in');
+								//already signed in
+							}
+						});
+					}
+					else{
+						console.log("Not in the classroom");
+						res.status(400).send("<p class='text-warning'>You are not in the classroom</p><small class='text-info'>Tip!:If you are in the classroom disconnect your wifi and reconnect.</small></br><small class='text-info'>Tip!: You can also use your phone which may be more accurate!</small>");
+					}
+				}
+				else{
+					console.log("Not Time for class");
+					res.status(400).send("It is not time for class yet");
+				}
+			}
+		});
+	}
 });
 
 createStudentAttendance = function(dates, attendance){
@@ -114,15 +129,19 @@ createStudentAttendance = function(dates, attendance){
 }
 
 router.get('/checkAttendance', function(req, res){
-	db.get().collection('Attendance').aggregate(
-		[
-		{$unwind: '$attendance'},
-		{$match: {classID: req.cookies.class, 'attendance.rcs': req.session.cas_user.toLowerCase()}},
-		{$group: {
-			_id: '$_id',
-			attendance: {$push: '$attendance'}
-		}}
-		 ]).toArray(function(err, docs){
+	if(req.session == undefined || req.session.cas_user == undefined){
+		res.status(403).send('Forbidden');
+	}
+	else{
+		db.get().collection('Attendance').aggregate(
+			[
+			{$unwind: '$attendance'},
+			{$match: {classID: req.cookies.class, 'attendance.rcs': req.session.cas_user.toLowerCase()}},
+			{$group: {
+				_id: '$_id',
+				attendance: {$push: '$attendance'}
+			}}
+		]).toArray(function(err, docs){
 		 	if(err) throw err;
 		 	console.log('after aggregate', docs[0]);
 		 	if(docs[0] == undefined){
@@ -137,6 +156,7 @@ router.get('/checkAttendance', function(req, res){
 				
 			}
 		});
+	}
 });
 
 
