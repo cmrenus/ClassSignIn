@@ -26,9 +26,7 @@ createAttendanceList = function(inClass, classList){
 
 
 router.get("/byDate", function(req, res){
-	//console.log(req.query);
 	var date = dateFormat(req.query.date, 'format');
-	//console.log(date);
 	var collection = db.get().collection('Attendance');
 	collection.aggregate(
 		[{$match: {classID: req.query.classID, 'attendance.date': date}}, 
@@ -42,21 +40,17 @@ router.get("/byDate", function(req, res){
 		 	}
 		 }
 		}]).toArray(function(err, docs){
-	//collection.find({'classID': req.query.classID, 'attendance.date': date}, {_id: 0,{$filter: {input: '$attendance', as: "item", cond: {$eq: ['$$item.date': date}]}}}).toArray(function(err, docs){
 		if(err) throw err;
 		if(docs[0] == undefined){
 			res.status(204).send('No Attendance');
 		}
 		else{
 			var inClass = docs[0].attendance;
-			console.log(inClass);
 			db.get().collection('Classes').find({'_id': new mongo.ObjectId(req.query.classID)}, {"classList": 1, _id: 0}).toArray(function(err, docs){
 				if(err) throw err;
-				//$scope.inClass.map(function(e){return e.rcs}).indexOf(student.rcs)
 				createAttendanceList(inClass, docs[0].classList).then(function(data){
 					res.send({classList: data})
 				});
-				//res.send({classList: docs[0].classList, inClass: inClass});
 			});
 		}
 
@@ -65,7 +59,6 @@ router.get("/byDate", function(req, res){
 });
 
 router.get('/byStudent', function(req, res){
-	console.log(req.query);
 	db.get().collection('Attendance').aggregate(
 		[{$match: {classID: req.query.classID, 'attendance.rcs': req.query.rcs}},
 		 {$project: {
@@ -88,6 +81,5 @@ router.get('/byStudent', function(req, res){
 			}
 		});
 });
-
 
 module.exports = router;

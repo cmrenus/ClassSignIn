@@ -2,7 +2,7 @@ angular.module('ClassSignIn')
 .factory('AuthService', ['$http', '$cookies', '$window',  function ($http, $cookies, $window) {
 
     function getUserStatus() {
-      return $cookies.get('user');//user;
+      return $cookies.get('user');
     }
 
     function logout(){
@@ -11,7 +11,6 @@ angular.module('ClassSignIn')
         url: 'logout'
       })
       .then(function(data){
-        console.log(data);
         $cookies.remove('user');
         $window.location = data.data;
       },
@@ -22,9 +21,7 @@ angular.module('ClassSignIn')
 
     // return available functions for use in controllers
     return ({
-      //sLoggedIn: isLoggedIn,
       getUserStatus: getUserStatus,
-      //login: login,
       logout: logout
     });
 }]);

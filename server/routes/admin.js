@@ -52,7 +52,6 @@ router.post("/newClass", function(req, res){
 
 //change the current semester
 router.post("/changeSemester", function(req, res){
-	console.log(req.body);
 	var collection = db.get().collection('Current');
 	collection.find().toArray(function(err, docs){
 		if (err) throw err;
@@ -85,7 +84,6 @@ router.post("/addStudent", function(req, res){
 
 router.post("/editClass", function(req, res){
 	var collection = db.get().collection('Classes');
-	console.log(req.body);
 	collection.update({'_id': new mongo.ObjectId(req.body._id)}, {$set: {startTime: req.body.startTime, TA: req.body.TA, days: req.body.days}}, function(err){
 		if(err) res.send(err);
 		else res.send("Success");
@@ -129,7 +127,6 @@ router.get("/classList", function(req, res){
 
 router.get('/classInfo', function(req, res){
 	var collection = db.get().collection('Classes');
-	console.log(req.query);
 	collection.find({'_id': new mongo.ObjectId(req.query.classID)}).toArray(function(err, docs){
 		if(err) throw err;
 		console.log(docs[0]);
@@ -140,7 +137,6 @@ router.get('/classInfo', function(req, res){
 
 router.delete('/deleteStudent', function(req, res){
 	var collection = db.get().collection('Classes');
-	console.log(req.query);
 	collection.update({'_id': new mongo.ObjectId(req.query.classID)}, {$pull: {classList: {rcs: req.query.rcs}}}, function(err){
 		if(err) throw err;
 		res.send(req.query.rcs + ' Removed');

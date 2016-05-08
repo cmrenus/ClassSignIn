@@ -114,11 +114,6 @@ createStudentAttendance = function(dates, attendance){
 }
 
 router.get('/checkAttendance', function(req, res){
-	console.log('start check');
-	console.log(req.cookies.class);
-	db.get().collection('Attendance').find({classID: req.cookies.class}).toArray(function(err, docs){
-		console.log(docs[0]);;
-	});
 	db.get().collection('Attendance').aggregate(
 		[
 		{$unwind: '$attendance'},
@@ -127,16 +122,6 @@ router.get('/checkAttendance', function(req, res){
 			_id: '$_id',
 			attendance: {$push: '$attendance'}
 		}}
-		 /*{$project: {
-		 	_id: 0,
-		 	attendance: {
-		 		$filter: {
-		 			input: '$attendance', 
-		 			as: 'item', 
-		 			cond: {$eq: ['$$item.rcs', req.session.cas_user.toLowerCase()]}
-		 		}
-		 	}
-		 }}*/
 		 ]).toArray(function(err, docs){
 		 	if(err) throw err;
 		 	console.log('after aggregate', docs[0]);
@@ -145,11 +130,9 @@ router.get('/checkAttendance', function(req, res){
 		 	}
 		 	else{
 		 		db.get().collection('Attendance').distinct("attendance.date", {classID: req.cookies.class}, function(err, results){
-		 			console.log(results);
 		 			createStudentAttendance(results, docs[0].attendance).then(function(data){
 		 				res.send(data);
 		 			})
-		 			//res.send({attendance: docs[0].attendance, dates: results});
 		 		})
 				
 			}
