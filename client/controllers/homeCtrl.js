@@ -1,5 +1,3 @@
-
-
 angular.module('ClassSignIn')
 .controller('homeCtrl', ['$scope', '$http', '$window', 'adminService', '$cookies', function($scope, $http, $window, Service, $cookies) {
 	
@@ -9,12 +7,10 @@ angular.module('ClassSignIn')
 		},
 		function(err){
 			sweetAlert("Oops..", err.data, "error");
-			console.log(err);
 		});
 	},
 	function(err){
 		sweetAlert("Oops..", err.data, "error");
-		console.log(err);
 	});
 
 	$scope.login = function(){
@@ -23,11 +19,9 @@ angular.module('ClassSignIn')
 			method : 'GET',
 			url: '/signIn?class=' + $scope.classSelect + '&returnTo=/%23/signIn'
 		}).then(function(data){
-			console.log(data.data);
 			$window.location = data.data;
 		}).catch(function(err){
 			sweetAlert("Oops..", err.data, "error");
-			console.log(err);
 		});
 	};
 }]);

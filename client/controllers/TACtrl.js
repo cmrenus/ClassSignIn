@@ -15,11 +15,9 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
 		},
 		function(err){
       sswal("Oops..", "Classes could not be retrieved", "error");
-			//errorModal(err.data);
 		});
 	},function(err){
     swal("Oops..", "Semester could not be retrieved", "error");
-		//errorModal(err.data);
 	});
 
   $scope.$watchGroup(['date.dt', 'date.classSelect'], function(newValues, oldValues){
@@ -43,15 +41,6 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
     minDate: new Date(),
     showWeeks: true
   };
-/*
-  $scope.dateOptions = {
-    dateDisabled: disabled,
-    formatYear: 'yy',
-    maxDate: new Date(2020, 5, 22),
-    minDate: new Date(),
-    startingDay: 1
-  };
-*/
   // Disable weekend selection
   function disabled(data) {
     var date = data.date,
@@ -61,7 +50,6 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
 
   $scope.toggleMin = function() {
     $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
-    //$scope.dateOptions.minDate = $scope.inlineOptions.minDate;
   };
 
   $scope.toggleMin();
@@ -111,42 +99,34 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
 
   getAttendanceByDate = function(date, classID){
   	adminService.getAttendanceByDate(date, classID).then(function(res){
-  		console.log(res);
       if(res.status == 204){
         $scope.noAttendance = "No Attendance";
         $scope.classList = undefined;
       }
       else{
     		$scope.classList = res.data.classList;
-    		//$scope.inClass = res.data.inClass;
     		$scope.noAttendance = undefined;
       }
   	},
   	function(err){
       swal("Oops..", "Attendance could not be retrieved", "error");
-  		//errorModal(err.data);
   	});
   };
 
   $scope.getStudents = function(classID){
-    console.log(classID);
     adminService.getClassInfo(classID).then(function(res){
-      console.log(res);
       $scope.classList2 = res.data.classList;
       $scope.dates = undefined;
       $scope.noDates = undefined;
     },
     function(err){
       swal("Oops..", "Students could not be retrieved", "error");
-      //errorModal(err.data);
     });
   };
 
   $scope.getAttendanceByStudent = function(rcs, classID){
-    console.log(rcs);
     if(rcs != ""){
       adminService.getAttendanceByStudent(rcs, classID).then(function(res){
-        console.log(res);
         if(res.status == 204){
           $scope.noDates = "No Attendance";
           $scope.dates = undefined;
@@ -159,7 +139,6 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
       },
       function(err){
         swal("Oops..", "Attendance could not be retrieved", "error");
-        //errorModal(err.data);
       });
     }
     else{

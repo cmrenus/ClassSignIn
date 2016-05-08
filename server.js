@@ -1,5 +1,5 @@
 var path = require('path'),
-	CASAuthentication = require('cas-authentication'),
+	CASAuthentication = require('./cas-authentication'),
 	session = require('express-session'),
 	cookieParser = require('cookie-parser'),
 	bodyParser = require('body-parser'),

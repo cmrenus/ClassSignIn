@@ -9,7 +9,6 @@ angular.module('ClassSignIn')
 	},
 	function(err){
 		swal("Oops..", "Semesters could not be retrieved", "error");
-		//errorModal(err.data);
 	});
 
 	adminService.getClassOptions().then(function(data){
@@ -22,36 +21,20 @@ angular.module('ClassSignIn')
 	},
 	function(err){
 		swal("Oops..", "Current semester could not be retrieved", "error");
-		//errorModal(err.data);
 	});
 
 	$scope.addClass = function(){
 		adminService.addClass($scope.newClass, $scope.files).then(function(res){
-			console.log(res);
 			swal("Class Added!", "Class " + $scope.newClass.semester + " " + $scope.newClass.className + " " + $scope.newClass.section + " was added!", "success");
-			/*$scope.modalInstance = $modal.open({
-	            animation: $scope.animationsEnabled,
-	            templateUrl: 'client/views/alert.html',
-	            controller: ['$scope', function(scope) {
-	                scope.cancel = $scope.cancel;
-	                scope.title = "Add Class";
-	              	scope.body = "Class " + $scope.newClass.semester + " " + $scope.newClass.className + " " + $scope.newClass.section + " was added";
-	            	$scope.newClass = {};
-	            	$scope.files = {};
-	            }]
-	        });*/
-	        //$scope.newClass = undefined;
 			adminService.getSemesters().then(function(res){
 				$scope.semesters = res.data;
 			},
 			function(err){
 				swal("Oops..", "Semesters could not be retrieved", "error");
-				//errorModal(err.data);
 			});
 		},
 		function(err){
 			swal("Oops..", err.data, "error");
-			//errorModal(err.data);
 		});
 	};
 
@@ -60,12 +43,10 @@ angular.module('ClassSignIn')
 		selectedSemester = semester;
 		$scope.classSelect = "";
 		adminService.getClasses(semester).then(function(res){
-			console.log(res.data);
 			$scope.classes = res.data;
 		},
 		function(err){
 			swal("Oops..", err.data, "error");
-			//errorModal(err.data);
 		});
 	};
 	
@@ -75,11 +56,9 @@ angular.module('ClassSignIn')
 			adminService.getClassInfo(classID).then(function(res){
 				res.data.startTime = new Date(res.data.startTime);
 				$scope.editClassInfo = res.data;
-				console.log(res.data);
 			},
 			function(err){
 				swal("Oops..", err.data, "error");
-				//errorModal(err.data);
 			});
 		}
 		else{
@@ -90,43 +69,21 @@ angular.module('ClassSignIn')
 	$scope.editClass = function(){
 		var changes = {_id: $scope.editClassInfo._id, TA: $scope.editClassInfo.TA, days: $scope.editClassInfo.days, startTime: $scope.editClassInfo.startTime }
 		adminService.editClass(changes).then(function(res){
-			console.log(res);
 			swal("Class Edited!", "The edit you made to this class was saved.", "success");
-			/*$scope.modalInstance = $modal.open({
-	          animation: $scope.animationsEnabled,
-	          templateUrl: 'client/views/alert.html',
-	          controller: ['$scope', function(scope){
-	            scope.cancel = $scope.cancel;
-	            scope.title = "Edit Class";
-	            scope.body = "The edit you made to the class was saved!";
-	          }]
-	        });*/
 		},
 		function(err){
 			swal("Oops..", err.data, "error");
-			//errorModal(err.data);
 		});
 	}
 
 	$scope.changeSem = function(semester){
-		console.log(semester);
 		adminService.changeSemester(semester).then(function(res){
 			$scope.currentSem = semester;
 			swal("Semester Changed!", "Current semester changed to " + semester, "success");
-			/*$scope.modalInstance = $modal.open({
-	          animation: $scope.animationsEnabled,
-	          templateUrl: 'client/views/alert.html',
-	          controller: ['$scope', function(scope){
-	            scope.cancel = $scope.cancel;
-	            scope.title = "Current Semester Changed";
-	            scope.body = "Current semester changed to " + semester;
-	          }]
-	        });*/
 			console.log(res);
 		},
 		function(err){
 			swal("Oops..", err.data, "error");
-			//errorModal(err.data);
 		});
 	};
 
@@ -157,19 +114,9 @@ angular.module('ClassSignIn')
 			$scope.editClassInfo.classList.push(newStudent);
 			$scope.modalInstance.dismiss('cancel');
 			swal("Student Added!", "Student " + newStudent.rcs + " was added!", "success");
-			/*$scope.modalInstance = $modal.open({
-	          animation: $scope.animationsEnabled,
-	          templateUrl: 'client/views/alert.html',
-	          controller: ['$scope', function(scope){
-	            scope.cancel = $scope.cancel;
-	            scope.title = "Add Student";
-	            scope.body = "Student " + newStudent.rcs + " was added";
-	          }]
-	        });*/
 		},
 		function(err){
 			swal("Oops..", err.data, "error");
-			//errorModal(err.data);
 		});
 	};
 
@@ -183,17 +130,8 @@ angular.module('ClassSignIn')
 			},
 			function(){
 				deleteStudent(rcs, classID)
-			});
-        /*$scope.modalInstance = $modal.open({
-            animation: $scope.animationsEnabled,
-            templateUrl: 'client/views/deleteStudentModal.html',
-            controller: ['$scope', function(scope) {
-                scope.cancel = $scope.cancel;
-                scope.rcs = rcs;
-                scope.classID = classID
-                scope.deleteStudent = $scope.deleteStudent;
-            }]
-        });*/
+			}
+		);
     };
 
     deleteStudent = function(rcs, classID){
@@ -210,7 +148,6 @@ angular.module('ClassSignIn')
         },
         function(err){
         	swal("Oops..", err.data, "error");
-        	//errorModal(err.data);
         });
     };
 
@@ -238,18 +175,4 @@ angular.module('ClassSignIn')
     		swal("Oops..", err.data, "error");
     	});
     }
-    /*
-    errorModal = function(error){
-    	$scope.modalInstance = $modal.open({
-            animation: $scope.animationsEnabled,
-            templateUrl: 'client/views/alert.html',
-            controller: ['$scope', function(scope) {
-                scope.cancel = $scope.cancel;
-                scope.title = "Error";
-                scope.body = error;
-            }]
-        });
-  	};
-*/
-
 }]);

@@ -15,7 +15,7 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 	when('/signIn', {
 		templateUrl: 'client/views/studentCheck.html',
 		controller: 'studentCheckCtrl',
-		access: {restricted: true}
+		access: {restricted: 'student'}
 	}).
 	when('/TA', {
 		templateUrl: 'client/views/TAPage.html',
@@ -25,8 +25,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 	otherwise({
 		redirectTo:'/'
 	});
-
-	//$locationProvider.html5Mode(true);
 }]);
 
 /*
