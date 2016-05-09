@@ -206,7 +206,6 @@ CASAuthentication.prototype.block = function(req, res, next) {
  * Handle a request with CAS authentication.
  */
 CASAuthentication.prototype._handle = function(req, res, next, authType) {
-
     // If the session has been validated with CAS, no action is required.
     if (req.session[ this.session_name ]) {
         // If this is a bounce redirect, redirect the authenticated user.
@@ -218,7 +217,19 @@ CASAuthentication.prototype._handle = function(req, res, next, authType) {
         else {
             console.log('else');
             if(req.session && req.session.cas_user){
-                res.send(req.session.cas_return_to);
+                if(req.cookies.type == 'admin'){
+                    res.send('/#/admin');
+                }
+                else if(req.cookies.type == 'TA'){
+                    res.send('/#/TA');
+                }
+                else if(req.cookies.type == 'student'){
+                    res.send('/#/signIn');
+                }
+                else{
+                    res.send('/#/');
+                }
+                //res.send(req.session.cas_return_to);
             }
             else{
                 next();
