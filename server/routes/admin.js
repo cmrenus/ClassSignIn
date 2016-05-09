@@ -38,7 +38,6 @@ router.use('*', function(req, res, next){
 		res.status(403).send('Forbidden');
 	}
 	else{
-		console.log('here?');
 		next();
 	}
 });

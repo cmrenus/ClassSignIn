@@ -22,9 +22,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 		controller: 'TACtrl',
 		access: {restricted: true, type: 'TA'}
 	}).
-	when('/logout', {
-		
-	})
 	otherwise({
 		redirectTo:'/'
 	});

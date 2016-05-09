@@ -211,11 +211,18 @@ CASAuthentication.prototype._handle = function(req, res, next, authType) {
     if (req.session[ this.session_name ]) {
         // If this is a bounce redirect, redirect the authenticated user.
         if (authType === AUTH_TYPE.BOUNCE_REDIRECT) {
+            console.log('if');
             res.redirect(req.session.cas_return_to);
         }
         // Otherwise, allow them through to their request.
         else {
-            res.send(req.session.cas_return_to);
+            console.log('else');
+            if(req.session && req.session.cas_user){
+                res.send(req.session.cas_return_to);
+            }
+            else{
+                next();
+            }
             //next();
         }
     }
