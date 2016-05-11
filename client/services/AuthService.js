@@ -17,6 +17,7 @@ angular.module('ClassSignIn')
       .then(function(data){
         $cookies.remove('user');
         $cookies.remove('type');
+        $cookies.remove('class');
         $window.location = data.data;
       },
       function(err){

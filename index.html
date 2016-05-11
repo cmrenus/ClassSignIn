@@ -10,12 +10,23 @@
 	
 </head>
 <body ng-app="ClassSignIn">
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-inverse" ng-controller="indexCtrl">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
-	        <img alt="Brand" height="50" src="client/resources/images/RPIlogo_white.png">
+	    	<a class="navbar-brand" href="#">
+		        <img alt="Brand" height="50" src="client/resources/images/RPIlogo_white.png">
+		    </a>
+		    <ul ng-show="isLoggedIn()" class="nav navbar-nav navbar-right pull-right nav-links">
+		    	<li><a href ng-click="logout()">Logout</a></li>
+		    </ul>
 	    </div>
+	    
+	    <!--
+	    <div ng-show="isLoggedIn()" class="pull-right">
+	    	<a ng-click="logout()">Logout</a>
+	    </div>-->
 	  </div>
+
 	</nav>
 	<div>
         <div id="content" ng-view></div>

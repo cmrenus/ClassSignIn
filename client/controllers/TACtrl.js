@@ -130,9 +130,12 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
         if(res.status == 204){
           $scope.noDates = "No Attendance";
           $scope.dates = undefined;
+          $scope.total = undefined;
         }
         else{
-          $scope.dates = res.data;
+          console.log(res.data);
+          $scope.dates = res.data.attendance;
+          $scope.total = res.data.count;
           $scope.noDates = undefined;
         }
         

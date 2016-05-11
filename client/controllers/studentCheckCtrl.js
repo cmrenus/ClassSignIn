@@ -21,7 +21,9 @@ angular.module('ClassSignIn')
 			method: 'GET',
 			url: '/signIn/checkAttendance'
 		}).then(function(data){
-			$scope.dates = data.data;
+			$scope.dates = data.data.attendance;
+			$scope.total = data.data.count;
+			console.log(data);
 		}).catch(function(err){
 			swal({
 				title: "Oops...",

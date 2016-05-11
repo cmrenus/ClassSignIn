@@ -1,186 +1,190 @@
 <div controller="adminCtrl"> 
-  <uib-tabset active="active">
-    <uib-tab index="0" heading="Set Current Semester">
-      <div class="container">
-        <h2>Current Semester: {{currentSem}}</h2>
-        <label for="currentSemSelect">Change Semester</label><br>
-        <select ng-show="semesters" name="currentSemSelect" id="currentSemSelect" ng-model="currentSemSelect">
-          <option value="">---Please select---</option>
-          <option ng-repeat="semester in semesters" value="{{semester}}">{{semester}}</option>
-        </select>
-        <button class="btn btn-success"  ng-click="changeSem(currentSemSelect)" ng-disabled="!currentSemSelect">
-          <span class="glyphicon glyphicon-save"></span>Submit
-        </button>
-      </div>
-    </uib-tab>
-    <uib-tab index="1" heading="Add a Class">
-      <div class="container">
-        <h2 class="title">Add A Class</h2>
-        <form name="newClassForm" class="form-horizontal">
-          <div class="form-group">
-            <label class="col-sm-3 control-label form-text">Semester:</label>
-            <div class="col-sm-3">
-              <input class="form-control" type="text" ng-model="newClass.semester" placeholder="ex. S16, F17" required >
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-sm-3 control-label form-text">Class</label>
-            <div class="col-sm-3">
-                <select name="className" ng-model="newClass.className" required>
-                  <option value="">---Please select---</option>
-                  <option ng-repeat="class in listOfClassOptions" value="{{class.name}}">{{class.name}}</option>
-                </select>
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label class="col-sm-3 control-label form-text">Section:</label>
-            <div class="col-sm-3">
-              <input class="form-control" type="text" ng-model="newClass.section" placeholder="ex. 1, 2, 3" required >
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-sm-3 control-label form-text">Start Time </label>
-            <div class="col-sm-3">
-              <input class="form-control" type="time" ng-model="newClass.startTime" placeholder="14:00"required>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-sm-3 control-label form-text">Days of Week </label>
-            <div class="col-sm-3">
-              <input class="form-control" type="text" ng-model="newClass.days" placeholder="ex. MR, W, TF" required >
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label class="col-sm-3 control-label form-text">TA RCSID </label>
-            <div class="col-sm-3">
-              <input class="form-control" type="text" ng-model="newClass.TARCS" placeholder="RCS ID" required >
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label class="col-sm-3 control-label form-text">Class List</label>
-            <div class="col-sm-9">
-              <div class="input-group">
-                <span class="input-group-btn">
-                    <span class="btn btn-primary btn-file">
-                        Browse&hellip; <input type="file" ngf-select ng-model="files.classList" name="file">
-                    </span>
-                </span>
-                <input type="text" ng-model="files.classList.name" readonly>
-              </div>
-            </div>
-          </div>
-
-          
-        </form>
-          <button class="btn btn-success pull-left"  ng-click="addClass()" ng-disabled="newClassForm.$invalid">
+  
+  <div class="container">
+    <a class="bottom-spacing" href="/#/">&#8592; Back to Sign In</a>
+    <uib-tabset active="active">
+      <uib-tab index="0" heading="Set Current Semester">
+        <div class="container">
+          <h2>Current Semester: {{currentSem}}</h2>
+          <label for="currentSemSelect">Change Semester</label><br>
+          <select ng-show="semesters" name="currentSemSelect" id="currentSemSelect" ng-model="currentSemSelect">
+            <option value="">---Please select---</option>
+            <option ng-repeat="semester in semesters" value="{{semester}}">{{semester}}</option>
+          </select>
+          <button class="btn btn-success"  ng-click="changeSem(currentSemSelect)" ng-disabled="!currentSemSelect">
             <span class="glyphicon glyphicon-save"></span>Submit
           </button>
-      </div>
-      
+        </div>
+      </uib-tab>
+      <uib-tab index="1" heading="Add a Class">
+        <div class="container">
+          <h2 class="title">Add A Class</h2>
+          <form name="newClassForm" class="form-horizontal">
+            <div class="form-group">
+              <label class="col-sm-3 control-label form-text">Semester:</label>
+              <div class="col-sm-3">
+                <input class="form-control" type="text" ng-model="newClass.semester" placeholder="ex. S16, F17" required >
+              </div>
+            </div>
 
-    </uib-tab>
-    <uib-tab index="3" heading="Edit Class/Students">
-      <div class="container">
-        <h2 class="title">Edit Class and Student Info</h2>
-        <label for="semSelect">Please Select a Semester</label><br>
-        <select name="semSelect" id="semSelect" ng-change="getClasses(semSelect); classSelect='';" ng-model="semSelect" ng-init="semSelect=''">
-          <option value="">---Please select---</option>
-          <option ng-repeat="semester in semesters" value="{{semester}}">{{semester}}</option>
-        </select>
-        <br>
-        <label ng-show="classes" ng-hide="semSelect == ''" for="classSelect">Please Select a Class</label><br>
-        <select ng-show="classes" name="classSelect" id="classSelect" ng-change="getClassInfo(classSelect)" ng-model="classSelect" ng-init="classSelect=''">
-          <option value="">---Please select---</option>
-          <option ng-repeat="class in classes" value="{{class._id}}">{{class.className + " " + class.section}}</option>
+            <div class="form-group">
+              <label class="col-sm-3 control-label form-text">Class</label>
+              <div class="col-sm-3">
+                  <select name="className" ng-model="newClass.className" required>
+                    <option value="">---Please select---</option>
+                    <option ng-repeat="class in listOfClassOptions" value="{{class.name}}">{{class.name}}</option>
+                  </select>
+              </div> 
+            </div>
 
-        </select>
+            <div class="form-group">
+              <label class="col-sm-3 control-label form-text">Section:</label>
+              <div class="col-sm-3">
+                <input class="form-control" type="text" ng-model="newClass.section" placeholder="ex. 1, 2, 3" required >
+              </div>
+            </div>
 
-        <div ng-show="editClassInfo">
-          <form name="editClassForm" class="form-horizontal">
+            <div class="form-group">
+              <label class="col-sm-3 control-label form-text">Start Time </label>
+              <div class="col-sm-3">
+                <input class="form-control" type="time" ng-model="newClass.startTime" placeholder="14:00"required>
+              </div>
+            </div>
 
-              <div class="form-group">
-                <label class="col-sm-3 control-label form-text">Start Time </label>
-                <div class="col-sm-3">
-                  <input class="form-control" type="time" ng-model="editClassInfo.startTime" placeholder="14:00"required>
+            <div class="form-group">
+              <label class="col-sm-3 control-label form-text">Days of Week </label>
+              <div class="col-sm-3">
+                <input class="form-control" type="text" ng-model="newClass.days" placeholder="ex. MR, W, TF" required >
+              </div> 
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label form-text">TA RCSID </label>
+              <div class="col-sm-3">
+                <input class="form-control" type="text" ng-model="newClass.TARCS" placeholder="RCS ID" required >
+              </div> 
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label form-text">Class List</label>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <span class="input-group-btn">
+                      <span class="btn btn-primary btn-file">
+                          Browse&hellip; <input type="file" ngf-select ng-model="files.classList" name="file">
+                      </span>
+                  </span>
+                  <input type="text" ng-model="files.classList.name" readonly>
                 </div>
               </div>
+            </div>
 
-              <div class="form-group">
-                <label class="col-sm-3 control-label form-text">Days of Week </label>
-                <div class="col-sm-3">
-                  <input class="form-control" type="text" ng-model="editClassInfo.days" placeholder="ex. MR, W, TF" required >
-                </div> 
-              </div>
+            
+          </form>
+            <button class="btn btn-success pull-left"  ng-click="addClass()" ng-disabled="newClassForm.$invalid">
+              <span class="glyphicon glyphicon-save"></span>Submit
+            </button>
+        </div>
+        
 
-              <div class="form-group">
-                <label class="col-sm-3 control-label form-text">TA RCSID </label>
-                <div class="col-sm-3">
-                  <input class="form-control" type="text" ng-model="editClassInfo.TA" placeholder="RCS ID" required >
-                </div> 
-              </div>
-              <button class="btn btn-primary" ng-click="editClass()" ng-disabled="editClassForm.$invalid">Edit Class</button>
-              
-            </form>
+      </uib-tab>
+      <uib-tab index="3" heading="Edit Class/Students">
+        <div class="container">
+          <h2 class="title">Edit Class and Student Info</h2>
+          <label for="semSelect">Please Select a Semester</label><br>
+          <select name="semSelect" id="semSelect" ng-change="getClasses(semSelect); classSelect='';" ng-model="semSelect" ng-init="semSelect=''">
+            <option value="">---Please select---</option>
+            <option ng-repeat="semester in semesters" value="{{semester}}">{{semester}}</option>
+          </select>
+          <br>
+          <label ng-show="classes" ng-hide="semSelect == ''" for="classSelect">Please Select a Class</label><br>
+          <select ng-show="classes" name="classSelect" id="classSelect" ng-change="getClassInfo(classSelect)" ng-model="classSelect" ng-init="classSelect=''">
+            <option value="">---Please select---</option>
+            <option ng-repeat="class in classes" value="{{class._id}}">{{class.className + " " + class.section}}</option>
 
-          <button class="btn btn-primary" ng-click="addStudentModal()">Add Student</button>
+          </select>
+
+          <div ng-show="editClassInfo">
+            <form name="editClassForm" class="form-horizontal">
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label form-text">Start Time </label>
+                  <div class="col-sm-3">
+                    <input class="form-control" type="time" ng-model="editClassInfo.startTime" placeholder="14:00"required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label form-text">Days of Week </label>
+                  <div class="col-sm-3">
+                    <input class="form-control" type="text" ng-model="editClassInfo.days" placeholder="ex. MR, W, TF" required >
+                  </div> 
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-3 control-label form-text">TA RCSID </label>
+                  <div class="col-sm-3">
+                    <input class="form-control" type="text" ng-model="editClassInfo.TA" placeholder="RCS ID" required >
+                  </div> 
+                </div>
+                <button class="btn btn-primary" ng-click="editClass()" ng-disabled="editClassForm.$invalid">Edit Class</button>
+                
+              </form>
+
+            <button class="btn btn-primary" ng-click="addStudentModal()">Add Student</button>
+            <table class="table table-striped">
+              <thead><tr>
+                <th>Delete</th>
+                <th>RCS ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+              </tr></thead>
+              <tbody>
+                <tr ng-repeat="student in editClassInfo.classList">
+                  <td>
+                    <button class="btn btn-danger" ng-click="deleteModal(student.rcs, classSelect)">
+                      <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </td>
+                  <td>{{student.rcs}}</td>
+                  <td>{{student.firstName}}</td>
+                  <td>{{student.lastName}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </uib-tab>
+      <uib-tab heading="Set Classes">
+        <div class="container">
+          <h2 class="title">Edit Class Options</h2>
+          <div class="form-group">
+            <label class="col-sm-3 control-label form-text">New Class: </label>
+            <div class="col-sm-3">
+              <input class="form-control" type="string" ng-model="newClassOption.name" placeholder="Ex. Intro to IT" required>
+            </div>
+          </div>
+          <button class="btn btn-info" ng-click="addNewClassOption(newClassOption.name); newClassOption.name = undefined;">Add!</button>
           <table class="table table-striped">
             <thead><tr>
               <th>Delete</th>
-              <th>RCS ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
+              <th>Class Name</th>
             </tr></thead>
             <tbody>
-              <tr ng-repeat="student in editClassInfo.classList">
+              <tr ng-repeat="class in listOfClassOptions">
                 <td>
-                  <button class="btn btn-danger" ng-click="deleteModal(student.rcs, classSelect)">
+                  <button class="btn btn-danger" ng-click="deleteClassOption(class.name)">
                     <span class="glyphicon glyphicon-remove"></span>
                   </button>
                 </td>
-                <td>{{student.rcs}}</td>
-                <td>{{student.firstName}}</td>
-                <td>{{student.lastName}}</td>
+                <td>{{class.name}}</td>
               </tr>
             </tbody>
-          </table>
-        </div>
-      </div>
-    </uib-tab>
-    <uib-tab heading="Set Classes">
-      <div class="container">
-        <h2 class="title">Edit Class Options</h2>
-        <div class="form-group">
-          <label class="col-sm-3 control-label form-text">New Class: </label>
-          <div class="col-sm-3">
-            <input class="form-control" type="string" ng-model="newClassOption.name" placeholder="Ex. Intro to IT" required>
-          </div>
-        </div>
-        <button class="btn btn-info" ng-click="addNewClassOption(newClassOption.name); newClassOption.name = undefined;">Add!</button>
-        <table class="table table-striped">
-          <thead><tr>
-            <th>Delete</th>
-            <th>Class Name</th>
-          </tr></thead>
-          <tbody>
-            <tr ng-repeat="class in listOfClassOptions">
-              <td>
-                <button class="btn btn-danger" ng-click="deleteClassOption(class.name)">
-                  <span class="glyphicon glyphicon-remove"></span>
-                </button>
-              </td>
-              <td>{{class.name}}</td>
-            </tr>
-          </tbody>
-        </table>   
-      </div> 
+          </table>   
+        </div> 
 
-    </uib-tab>
-  </uib-tabset>
+      </uib-tab>
+    </uib-tabset>
+  </div>
 </div>
 

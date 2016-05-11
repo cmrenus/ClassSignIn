@@ -202,6 +202,9 @@ CASAuthentication.prototype.block = function(req, res, next) {
     this._handle(req, res, next, AUTH_TYPE.BLOCK);
 };
 
+var db = require('../server/db'),
+    mongo = require('mongodb');
+
 /**
  * Handle a request with CAS authentication.
  */
@@ -220,6 +223,20 @@ CASAuthentication.prototype._handle = function(req, res, next, authType) {
                 if(req.cookies.type == 'admin'){
                     res.send('/#/admin');
                 }
+                else{
+                    db.get().collection('Classes').find({_id: new mongo.ObjectID(req.cookies.class), TA: req.session.cas_user.toLowerCase()}).toArray(function(err, docs){
+                        if(docs.length > 0){
+                            res.cookie('type', 'TA');
+                            res.send('/#/TA');
+                        }
+                        else{
+                            res.cookie('type', 'student');
+                            res.send('/#/signIn');
+                            //next();
+                        }
+                    })
+                } 
+               /*
                 else if(req.cookies.type == 'TA'){
                     res.send('/#/TA');
                 }
@@ -228,7 +245,7 @@ CASAuthentication.prototype._handle = function(req, res, next, authType) {
                 }
                 else{
                     res.send('/#/');
-                }
+                }*/
                 //res.send(req.session.cas_return_to);
             }
             else{
@@ -283,7 +300,7 @@ CASAuthentication.prototype._login = function(req, res, next) {
  * Logout the currently logged in CAS user.
  */
 CASAuthentication.prototype.logout = function(req, res, next) {
-
+    res.cookies = {};
     // Destroy the entire session if the option is set.
     if (this.destroy_session) {
         req.session.destroy(function(err) {

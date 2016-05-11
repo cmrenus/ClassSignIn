@@ -40,3 +40,23 @@ app.run(['$rootScope', '$location', '$route', 'AuthService', function ($rootScop
     }
   });
 }]);
+
+app.controller('indexCtrl', ['AuthService', '$scope', function(AuthService, $scope){
+	$scope.logout = function(){
+		AuthService.logout();
+	};
+
+	$scope.isLoggedIn = function(){
+		if(AuthService.getUserStatus() == undefined){
+			return false;
+		}
+		else if(AuthService.getUserStatus() == ''){
+			return false;
+		}
+		else{
+			return true;
+		}
+	};
+
+
+}])

@@ -139,7 +139,8 @@ router.get('/checkAttendance', function(req, res){
 			{$match: {classID: req.cookies.class, 'attendance.rcs': req.session.cas_user.toLowerCase()}},
 			{$group: {
 				_id: '$_id',
-				attendance: {$push: '$attendance'}
+				attendance: {$push: '$attendance'},
+				count:{$sum: 1}
 			}}
 		]).toArray(function(err, docs){
 		 	if(err) throw err;
@@ -150,7 +151,7 @@ router.get('/checkAttendance', function(req, res){
 		 	else{
 		 		db.get().collection('Attendance').distinct("attendance.date", {classID: req.cookies.class}, function(err, results){
 		 			createStudentAttendance(results, docs[0].attendance).then(function(data){
-		 				res.send(data);
+		 				res.send({attendance: data, count: docs[0].count});
 		 			})
 		 		})
 				

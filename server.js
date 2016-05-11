@@ -9,6 +9,7 @@ var path = require('path'),
     db = require('./server/db'),
     dbURI = 'mongodb://localhost:27017/ClassSignIn',
     MongoDBStore = require('connect-mongodb-session')(session),
+    mongo = require('mongodb');
     store = new MongoDBStore({
         uri: dbURI,
         collection: 'mySessions'
@@ -67,12 +68,12 @@ app.get('/signIn', cas.bounce, function (req, res, next) {
     }
     console.log('in server code');
     res.cookie('user', req.session.cas_user);
-    if(req.session.cas_user == "RENUSC"){
+    if(req.session.cas_user == "PLOTKR"){
         res.cookie('type', 'admin');
         res.redirect('/#/admin');
     }
     else{
-        db.get().collection('Classes').find({TA: req.session.cas_user.toLowerCase()}).toArray(function(err, docs){
+        db.get().collection('Classes').find({_id: new mongo.ObjectID(req.cookies.class), TA: req.session.cas_user.toLowerCase()}).toArray(function(err, docs){
             if(docs.length > 0){
                 res.cookie('type', 'TA');
                 res.redirect('/#/TA');

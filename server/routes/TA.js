@@ -24,6 +24,25 @@ createAttendanceList = function(inClass, classList){
 	return deferred.promise;
 }
 
+createStudentAttendance = function(dates, attendance){
+	var deferred = q.defer(),
+	index;
+	for(x = 0; x < dates.length; x++){
+		index = attendance.map(function(e) { return e.date; }).indexOf(dates[x]);
+		console.log(index);
+		if(index != -1){
+			attendance[index].present = true;
+		}
+		else{
+			attendance.push({date: dates[x], present: false});
+		}
+		if(x == dates.length - 1){
+			deferred.resolve(attendance);
+		}
+	}
+	return deferred.promise;
+}
+
 router.use('*', function(req, res, next){
 	console.log(req.session, req.cookies);
 	if((req.session == undefined || req.session.cas_user == undefined) && req.session.cas_user != req.cookies.user && (req.cookies.type != 'TA' || req.cookies.type != 'admin')){
@@ -66,7 +85,7 @@ router.get("/byDate", function(req, res){
 	});
 
 });
-
+/*
 router.get('/byStudent', function(req, res){
 	db.get().collection('Attendance').aggregate(
 		[{$match: {classID: req.query.classID, 'attendance.rcs': req.query.rcs}},
@@ -89,6 +108,38 @@ router.get('/byStudent', function(req, res){
 				res.send(docs[0].attendance);
 			}
 		});
+});*/
+
+router.get('/byStudent', function(req, res){
+	if(req.session == undefined || req.session.cas_user == undefined){
+		res.status(403).send('Forbidden');
+	}
+	else{
+		db.get().collection('Attendance').aggregate(
+			[
+			{$unwind: '$attendance'},
+			{$match: {classID: req.query.classID, 'attendance.rcs': req.query.rcs}},
+			{$group: {
+				_id: '$_id',
+				attendance: {$push: '$attendance'},
+				count:{$sum: 1}
+			}}
+		]).toArray(function(err, docs){
+		 	if(err) throw err;
+		 	console.log('after aggregate', docs[0]);
+		 	if(docs[0] == undefined){
+		 		res.status(204).send('No Attendance');
+		 	}
+		 	else{
+		 		db.get().collection('Attendance').distinct("attendance.date", {classID: req.query.classID}, function(err, results){
+		 			createStudentAttendance(results, docs[0].attendance).then(function(data){
+		 				res.send({attendance: data, count: docs[0].count});
+		 			})
+		 		})
+				
+			}
+		});
+	}
 });
 
 module.exports = router;

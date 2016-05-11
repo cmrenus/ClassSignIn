@@ -31,3 +31,27 @@ input[readonly] {
 .bottom-spacing{
   padding-bottom: 2%;
 }
+
+.navbar-brand{
+  padding: 0px;
+}
+
+
+ul{
+  margin-top: 10px;
+}
+
+.navbar-header{
+  width: 100%;
+}
+
+@media screen and (max-width: 767px){
+  .navbar .container-fluid{
+    padding-right: 0px;
+  }
+}
+
+
+.navbar-inverse .navbar-nav>li>a{
+  color: #fa0322;
+}
