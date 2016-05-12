@@ -28,11 +28,15 @@ var admin = require('./server/routes/admin');
 var TA = require('./server/routes/TA');
 var student = require('./server/routes/student');
 
+//middlewares
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+
+//static file usage
 app.use('/', express.static(path.join(__dirname, '/')));
 
+//header options
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "localhost:8005");
     res.header("Access-Control-Allow-Methods", "*");
@@ -60,15 +64,14 @@ var cas = new CASAuthentication({
     cas_version: '2.0'
 });
 
-//CAS route handlers
-
+//sign in route handler
 app.get('/signIn', cas.bounce, function (req, res, next) {
     if (!req.session || !req.session.cas_user) {
         res.redirect('/#/');
     }
     console.log('in server code');
     res.cookie('user', req.session.cas_user);
-    if(req.session.cas_user == "PLOTKR"){
+    if(req.session.cas_user == "RENUSC"){
         res.cookie('type', 'admin');
         res.redirect('/#/admin');
     }
@@ -95,7 +98,7 @@ app.use('/signIn', student);
 app.get('/logout', cas.logout);
 
 
-
+//connect to db and if successful, start server
 db.connect(dbURI, function(err) {
   if (err) {
     console.log('Unable to connect to Mongo.')

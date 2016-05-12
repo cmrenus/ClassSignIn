@@ -2,6 +2,7 @@
   
   <div class="container">
     <a class="bottom-spacing" href="/#/">&#8592; Back to Sign In</a>
+    <a class="pull-right" href="/#/TA">View Attendance</a>
     <uib-tabset active="active">
       <uib-tab index="0" heading="Set Current Semester">
         <div class="container">
@@ -164,7 +165,7 @@
               <input class="form-control" type="string" ng-model="newClassOption.name" placeholder="Ex. Intro to IT" required>
             </div>
           </div>
-          <button class="btn btn-info" ng-click="addNewClassOption(newClassOption.name); newClassOption.name = undefined;">Add!</button>
+          <button class="btn btn-info" ng-click="addNewClassOption(newClassOption.name); newClassOption.name = undefined;" ng-disabled="!newClassOption.name">Add!</button>
           <table class="table table-striped">
             <thead><tr>
               <th>Delete</th>

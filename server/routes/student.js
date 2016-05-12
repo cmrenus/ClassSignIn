@@ -16,6 +16,8 @@ weekday[4] = "R";
 weekday[5] = "F";
 weekday[6] = "Saturday";
 
+
+//helper function to check if student is within the classroom
 function checkLocation(coords){
 	if(coords.latitude > 42.730061 && coords.latitude < 42.730118){
 		if(coords.longitude > -73.681723 && coords.longitude < -73.682089){
@@ -30,18 +32,17 @@ function checkLocation(coords){
 	}
 }
 
+//middleware to check if user is a student
 router.use('*', function(req, res, next){
-	console.log(req.session, req.cookies);
 	if((req.session == undefined || req.session.cas_user == undefined) && req.session.cas_user != req.cookies.user && req.cookies.type != 'student'){
 		res.status(403).send('Forbidden');
 	}
 	else{
-		console.log('here?');
 		next();
 	}
 });
 
-
+//request for signing in
 router.post('/', function(req,res){
 	if(req.session == undefined || req.session.cas_user == undefined){
 		res.status(403).send('Forbidden');
@@ -77,21 +78,19 @@ router.post('/', function(req,res){
 								}
 							}}
 						]).toArray(function(err,docs){
-							if(err) throw err;
-
-							if(docs.length == 0){
+							if(err) res.status(500).send("Error checking if signed in");
+							else if(docs.length == 0){
 								//not signed in
 								console.log("not signed in");
 								attendance.update({'classID': req.cookies.class}, {$push: {attendance: {rcs:rcs, date: date}}}, function(err, docs){
-									if(err) throw err;
-									res.send(docs);
+									if(err) res.status(500).send("Error signing in");
+									else res.send(docs);
 								});
 								
 							}
 							else{
 								res.status(400).send('You have already signed in today');
 								console.log('already signed in');
-								//already signed in
 							}
 						});
 					}
@@ -109,12 +108,12 @@ router.post('/', function(req,res){
 	}
 });
 
+//synchronous helper function to create attendance for student
 createStudentAttendance = function(dates, attendance){
-	var deferred = q.defer(),
-	index;
+	var deferred = q.defer();
+	var index;
 	for(x = 0; x < dates.length; x++){
 		index = attendance.map(function(e) { return e.date; }).indexOf(dates[x]);
-		console.log(index);
 		if(index != -1){
 			attendance[index].present = true;
 		}
@@ -128,6 +127,7 @@ createStudentAttendance = function(dates, attendance){
 	return deferred.promise;
 }
 
+//retrieve students attendance
 router.get('/checkAttendance', function(req, res){
 	if(req.session == undefined || req.session.cas_user == undefined){
 		res.status(403).send('Forbidden');
@@ -143,17 +143,19 @@ router.get('/checkAttendance', function(req, res){
 				count:{$sum: 1}
 			}}
 		]).toArray(function(err, docs){
-		 	if(err) throw err;
-		 	console.log('after aggregate', docs[0]);
-		 	if(docs[0] == undefined){
+		 	if(err) res.status(500).send("Error finding attendance");
+		 	else if(docs[0] == undefined){
 		 		res.status(204).send('No Attendance');
 		 	}
 		 	else{
 		 		db.get().collection('Attendance').distinct("attendance.date", {classID: req.cookies.class}, function(err, results){
-		 			createStudentAttendance(results, docs[0].attendance).then(function(data){
-		 				res.send({attendance: data, count: docs[0].count});
-		 			})
-		 		})
+		 			if(err) res.status(500).send("Error getting attendance");
+		 			else{
+		 				createStudentAttendance(results, docs[0].attendance).then(function(data){
+			 				res.send({attendance: data, count: docs[0].count});
+			 			});
+			 		}
+		 		});
 				
 			}
 		});
