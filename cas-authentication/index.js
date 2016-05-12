@@ -213,12 +213,10 @@ CASAuthentication.prototype._handle = function(req, res, next, authType) {
     if (req.session[ this.session_name ]) {
         // If this is a bounce redirect, redirect the authenticated user.
         if (authType === AUTH_TYPE.BOUNCE_REDIRECT) {
-            console.log('if');
             res.redirect(req.session.cas_return_to);
         }
         // Otherwise, allow them through to their request.
         else {
-            console.log('else');
             if(req.session && req.session.cas_user){
                 if(req.cookies.type == 'admin'){
                     res.send('/#/admin');

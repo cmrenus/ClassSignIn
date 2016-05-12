@@ -69,7 +69,6 @@ app.get('/signIn', cas.bounce, function (req, res, next) {
     if (!req.session || !req.session.cas_user) {
         res.redirect('/#/');
     }
-    console.log('in server code');
     res.cookie('user', req.session.cas_user);
     if(req.session.cas_user == "RENUSC"){
         res.cookie('type', 'admin');
