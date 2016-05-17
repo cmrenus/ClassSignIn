@@ -163,16 +163,25 @@ angular.module('ClassSignIn')
     };
 
     $scope.deleteClassOption = function(name){
-    	adminService.deleteClassOption(name).then(function(data){
-    		swal("Deleted!", "The class, " + name + ", was deleted as a class option!", "success");
-    		for(x in $scope.listOfClassOptions){
-    			if($scope.listOfClassOptions[x].name == name){
-    				$scope.listOfClassOptions.splice(x, 1);
-    			}
-    		}
+    	swal({
+    		title: "Are you sure you want to delete this class option?",
+    		type: "warning",
+    		showCancelButton: true,
+			confirmButtonText: "Yes, Delete it!",
+			closeOnConfirm: false
     	},
-    	function(err){
-    		swal("Oops..", err.data, "error");
-    	});
+    	function(){
+    		adminService.deleteClassOption(name).then(function(data){
+	    		swal("Deleted!", "The class, " + name + ", was deleted as a class option!", "success");
+	    		for(x in $scope.listOfClassOptions){
+	    			if($scope.listOfClassOptions[x].name == name){
+	    				$scope.listOfClassOptions.splice(x, 1);
+	    			}
+	    		}
+	    	},
+	    	function(err){
+	    		swal("Oops..", err.data, "error");
+	    	});
+    	})
     }
 }]);
