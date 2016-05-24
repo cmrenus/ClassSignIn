@@ -29,7 +29,6 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
 
 app.run(['$rootScope', '$location', '$route', 'AuthService', function ($rootScope, $location, $route, AuthService) {
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
-  	console.log(next.$$route != undefined && next.$$route.access != undefined && next.$$route.access.restricted && (next.$$route.access.type == AuthService.getUserType() || (next.$$route.access.type == 'TA' && AuthService.getUserType() == 'admin')))
     if (next.$$route != undefined && next.$$route.access != undefined && next.$$route.access.restricted && (next.$$route.access.type == AuthService.getUserType() || (next.$$route.access.type == 'TA' && AuthService.getUserType() == 'admin'))) {
    		
     }

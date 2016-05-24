@@ -70,7 +70,7 @@ app.get('/signIn', cas.bounce, function (req, res, next) {
         res.redirect('/#/');
     }
     res.cookie('user', req.session.cas_user);
-    if(req.session.cas_user == "RENUSC"){
+    if(req.session.cas_user == "PLOTKR"){
         res.cookie('type', 'admin');
         res.redirect('/#/admin');
     }

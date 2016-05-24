@@ -133,7 +133,6 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
           $scope.total = undefined;
         }
         else{
-          console.log(res.data);
           $scope.dates = res.data.attendance;
           $scope.total = res.data.count;
           $scope.noDates = undefined;

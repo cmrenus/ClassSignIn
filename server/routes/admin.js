@@ -127,7 +127,7 @@ router.post("/changeSemester", function(req, res){
 router.post("/addStudent", function(req, res){
 	var collection = db.get().collection('Classes');
 	var student = req.body.student;
-	collection.update({'_id': new mongo.ObjectId(req.body.classID)}, {$push: {classList: {rcs: student.rcs, firstName: student.firstName, lastName: student.lastName}}},function(err){
+	collection.update({'_id': new mongo.ObjectId(req.body.classID)}, {$push: {classList: {rcs: student.rcs.toLowerCase(), firstName: student.firstName, lastName: student.lastName}}},function(err){
 		if(err) res.status(500).send("Error adding student");
 		else res.send("Success");
 	});

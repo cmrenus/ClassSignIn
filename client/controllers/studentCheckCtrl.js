@@ -1,5 +1,5 @@
 angular.module('ClassSignIn')
-.controller('studentCheckCtrl', ['$scope' , '$http', 'geolocation', 'adminService', '$window', '$uibModal', function($scope, $http, geolocation, adminService, $window, $modal){
+.controller('studentCheckCtrl', ['$scope' , '$http', 'geolocation', 'adminService', '$window',  function($scope, $http, geolocation, adminService, $window){
 
 	geolocation.getLocation().then(function(data){
 		swal("Logging In!");
@@ -23,7 +23,6 @@ angular.module('ClassSignIn')
 		}).then(function(data){
 			$scope.dates = data.data.attendance;
 			$scope.total = data.data.count;
-			console.log(data);
 		}).catch(function(err){
 			swal({
 				title: "Oops...",

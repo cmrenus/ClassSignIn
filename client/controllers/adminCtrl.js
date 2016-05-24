@@ -32,6 +32,7 @@ angular.module('ClassSignIn')
 			function(err){
 				swal("Oops..", "Semesters could not be retrieved", "error");
 			});
+			$scope.newClass = {};
 		},
 		function(err){
 			swal("Oops..", err.data, "error");
@@ -112,7 +113,6 @@ angular.module('ClassSignIn')
    		}
 		adminService.addStudent(newStudent, selectedClass).then(function(res){
 			$scope.editClassInfo.classList.push(newStudent);
-			$scope.modalInstance.dismiss('cancel');
 			swal("Student Added!", "Student " + newStudent.rcs + " was added!", "success");
 		},
 		function(err){
@@ -140,7 +140,6 @@ angular.module('ClassSignIn')
             for(x in $scope.editClassInfo.classList){
                 if($scope.editClassInfo.classList[x].rcs == rcs){
                     $scope.editClassInfo.classList.splice(x, 1);
-                    $scope.modalInstance.dismiss('cancel');
                     return;
                 }
             }
