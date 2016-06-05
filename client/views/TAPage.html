@@ -20,6 +20,7 @@
 				<div class="col-md-6">
 					<table ng-show="classList" class="table table-striped">
 				        <thead><tr>
+				          <th></th>
 				          <th>Last</th>
 				          <th>First</th>
 				          <th>RCS</th>
@@ -27,6 +28,11 @@
 				        </tr></thead>
 				        <tbody>
 				          <tr ng-repeat="student in classList">
+				          	<td>
+				          		<button class="btn btn-success" ng-click="editAttendance(student.rcs, date.dt, student.present, date.classSelect)">
+			                      Edit <span class="glyphicon glyphicon-edit"></span>
+			                    </button>
+			                </td>
 				            <td>{{student.lastName}}</td>
 				          	<td>{{student.firstName}}</td>
 				          	<td>{{student.rcs}}</td>
@@ -63,11 +69,17 @@
 					</ul>-->
 					<table ng-show="dates" class="table table-striped">
 				        <thead><tr>
+				          <th></th>
 				          <th>Date</th>
 				          <th>Present</th>
 				        </tr></thead>
 				        <tbody>
 				          <tr ng-repeat="date in dates">
+				          	<td>
+				          		<button class="btn btn-success" ng-click="editAttendance(student2.rcs, date.date, date.present, date.classSelectStudent)">
+			                      Edit <span class="glyphicon glyphicon-edit"></span>
+			                    </button>
+			                </td>
 				            <td>{{date.date}}</td>
 				            <td ng-switch="{{date.present}}">
 				            	<img ng-switch-when="true" width="20px" ng-src="resources/images/greenCheck.png">

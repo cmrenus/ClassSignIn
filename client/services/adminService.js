@@ -113,4 +113,12 @@ angular.module('ClassSignIn')
 			url: 'admin/classOptions'
 		});
 	};
+
+	this.editAttendance = function(rcs, date, classID, present){
+		return $http({
+			method: 'PUT',
+			url: 'attendance/editAttendance',
+			data: {rcs: rcs, date: date, classID: classID, present: present}
+		});
+	};
 }]);

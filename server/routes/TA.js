@@ -124,4 +124,30 @@ router.get('/byStudent', function(req, res){
 	}
 });
 
+
+router.put('/editAttendance', function(req, res){
+	var date = dateFormat(req.body.date, 'format');
+	if(req.session == undefined || req.session.cas_user == undefined){
+		res.status(403).send('Forbidden');
+	}
+	else{
+		if(req.body.present == undefined || req.body.present == false){
+			db.get().collection('Attendance').update({classID: req.body.classID}, {$push: {attendance: {rcs: req.body.rcs, date: date}}}, function(err, results){
+				if(err) res.status(503).send("Error editing Attendance");
+				else{
+					res.send("Students attendance was changed successfully");
+				}
+			});	
+		}
+		else{
+			db.get().collection('Attendance').update({classID: req.body.classID}, {$pull: {attendance: {date: date, rcs: req.body.rcs}}}, function(err, results){
+				if(err) res.status(503).send("Error editing Attendance");
+				else{
+					res.send("Students attendance was changed successfully");
+				}
+			});
+		}	
+	}
+});
+
 module.exports = router;

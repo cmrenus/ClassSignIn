@@ -148,4 +148,26 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
       $scope.dates = undefined;
     }
   };
+
+  $scope.editAttendance = function(rcs, date, present, classID){
+    console.log(classID, present);
+    var text = "present";
+    if(present){
+      text = "absent";
+    }
+    swal({
+      title: "Are you sure?",
+      text: "Change "+ rcs +"'s attendance for " + date + " to " + text + "?",
+      type: 'warning',
+      showCancelButton: true
+    },
+    function(){
+      adminService.editAttendance(rcs, date, classID, present).then(function(res){
+        swal("Edited!", "Attendance was changed", "success");
+      },
+      function(err){
+        swal("Oops..", "Attendance could not be changed", "error");
+      });
+    });
+  };
 }]);
