@@ -29,7 +29,7 @@
 				        <tbody>
 				          <tr ng-repeat="student in classList">
 				          	<td>
-				          		<button class="btn btn-success" ng-click="editAttendance(student.rcs, date.dt, student.present, date.classSelect)">
+				          		<button class="btn btn-success" ng-click="editAttendance(student.rcs, date.dt, student.present, date.classSelect, 'date')">
 			                      Edit <span class="glyphicon glyphicon-edit"></span>
 			                    </button>
 			                </td>
@@ -76,7 +76,7 @@
 				        <tbody>
 				          <tr ng-repeat="date in dates">
 				          	<td>
-				          		<button class="btn btn-success" ng-click="editAttendance(student2.rcs, date.date, date.present, date.classSelectStudent)">
+				          		<button class="btn btn-success" ng-click="editAttendance(student2.rcs, date.date, date.present, date.classSelectStudent, 'student')">
 			                      Edit <span class="glyphicon glyphicon-edit"></span>
 			                    </button>
 			                </td>
