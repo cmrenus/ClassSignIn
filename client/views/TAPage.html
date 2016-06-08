@@ -37,8 +37,10 @@
 				          	<td>{{student.firstName}}</td>
 				          	<td>{{student.rcs}}</td>
 				            <td ng-switch="{{student.present}}">
-				            	<img ng-switch-when="true" width="20px" ng-src="resources/images/greenCheck.png">
-								<img ng-switch-when="undefined" width="20px" ng-src="resources/images/redCross.png">
+				            	<img ng-show="student.present" width="20px" ng-src="resources/images/greenCheck.png">
+				            	<img ng-hide="student.present" width="20px" ng-src="resources/images/redCross.png">
+				            	<!--<img ng-switch-when="true" width="20px" ng-src="resources/images/greenCheck.png">
+								<img ng-switch-when="undefined" width="20px" ng-src="resources/images/redCross.png">-->
 				            </td>
 				          </tr>
 				        </tbody>

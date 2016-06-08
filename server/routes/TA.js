@@ -57,6 +57,7 @@ router.use('*', function(req, res, next){
 router.get("/byDate", function(req, res){
 	var date = dateFormat(req.query.date, 'format');
 	var collection = db.get().collection('Attendance');
+	console.log(req.query.classID, date);
 	collection.aggregate(
 		[{$match: {classID: req.query.classID, 'attendance.date': date}}, 
 		 {$project: {

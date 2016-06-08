@@ -98,7 +98,9 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
   };
 
   getAttendanceByDate = function(date, classID){
+    console.log(date, classID);
   	adminService.getAttendanceByDate(date, classID).then(function(res){
+      console.log(res);
       if(res.status == 204){
         $scope.noAttendance = "No Attendance";
         $scope.classList = undefined;
@@ -109,6 +111,7 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
       }
   	},
   	function(err){
+      console.log(err);
       swal("Oops..", "Attendance could not be retrieved", "error");
   	});
   };
@@ -150,8 +153,10 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
   };
 
   $scope.editAttendance = function(rcs, date, present, classID, button){
-    console.log(classID, present);
     var text = "present";
+    if(present == undefined){
+      present = false;
+    }
     if(present){
       text = "absent";
     }
@@ -167,7 +172,11 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
         swal("Edited!", "Attendance was changed", "success");
         if(button == 'date'){
           for(x in $scope.classList){
+            console.log($scope.classList[x].rcs, rcs);
             if($scope.classList[x].rcs == rcs){
+              console.log('here');
+              console.log($scope.classList[x]);
+              console.log(present);
               $scope.classList[x].present = !present;
               break;
             }
@@ -175,6 +184,7 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
         }
         else{
           for(x in $scope.dates){
+            //console.log($scope.classList[x].rcs, rcs);
             if($scope.dates[x].date == date){
               $scope.dates[x].present = !present;
               break;

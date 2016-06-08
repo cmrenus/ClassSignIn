@@ -7,15 +7,14 @@ var path = require('path'),
     port = process.env.PORT || 8005,
     app = express(),
     db = require('./server/db'),
-    //dbURI = 'mongodb://localhost:27017/ClassSignIn',
-    dbURI = 'mongodb://' + process.env.csiDBUser + ':' + process.env.csiDBPassword + '@ds011374.mlab.com:11374/classsignin',
+    dbURI = 'mongodb://localhost:27017/ClassSignIn',
+    //dbURI = 'mongodb://' + process.env.csiDBUser + ':' + process.env.csiDBPassword + '@ds011374.mlab.com:11374/classsignin',
     MongoDBStore = require('connect-mongodb-session')(session),
     mongo = require('mongodb');
     store = new MongoDBStore({
         uri: dbURI,
         collection: 'mySessions'
     });
-
 
 // Catch errors 
 store.on('error', function(error) {
