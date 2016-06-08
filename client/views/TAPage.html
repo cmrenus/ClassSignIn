@@ -78,14 +78,14 @@
 				        <tbody>
 				          <tr ng-repeat="date in dates">
 				          	<td>
-				          		<button class="btn btn-success" ng-click="editAttendance(student2.rcs, date.date, date.present, date.classSelectStudent, 'student')">
+				          		<button class="btn btn-success" ng-click="editAttendance(studentSelect, date.date, date.present, date.classSelectStudent, 'student')">
 			                      Edit <span class="glyphicon glyphicon-edit"></span>
 			                    </button>
 			                </td>
 				            <td>{{date.date}}</td>
-				            <td ng-switch="{{date.present}}">
-				            	<img ng-switch-when="true" width="20px" ng-src="resources/images/greenCheck.png">
-								<img ng-switch-when="false" width="20px" ng-src="resources/images/redCross.png">
+				            <td>
+				            	<img ng-show="date.present" width="20px" ng-src="resources/images/greenCheck.png">
+								<img ng-hide="date.present" width="20px" ng-src="resources/images/redCross.png">
 				            </td>
 				          </tr>
 				          <tr>

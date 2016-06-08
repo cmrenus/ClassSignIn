@@ -154,6 +154,10 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
 
   $scope.editAttendance = function(rcs, date, present, classID, button){
     var text = "present";
+    if(button == "student"){
+      console.log("student");
+      classID = document.getElementById("date.classSelectStudent").value;
+    }
     if(present == undefined){
       present = false;
     }
@@ -174,18 +178,17 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
           for(x in $scope.classList){
             console.log($scope.classList[x].rcs, rcs);
             if($scope.classList[x].rcs == rcs){
-              console.log('here');
-              console.log($scope.classList[x]);
-              console.log(present);
               $scope.classList[x].present = !present;
               break;
             }
           }
         }
         else{
+          console.log('here');
           for(x in $scope.dates){
-            //console.log($scope.classList[x].rcs, rcs);
+            console.log($scope.dates[x].date, date);
             if($scope.dates[x].date == date){
+              console.log($scope.dates[x]);
               $scope.dates[x].present = !present;
               break;
             }
