@@ -4,10 +4,11 @@ var path = require('path'),
 	cookieParser = require('cookie-parser'),
 	bodyParser = require('body-parser'),
 	express = require('express'),
-    port = 8005,
+    port = process.env.PORT || 8005,
     app = express(),
     db = require('./server/db'),
-    dbURI = 'mongodb://localhost:27017/ClassSignIn',
+    //dbURI = 'mongodb://localhost:27017/ClassSignIn',
+    dbURI = 'mongodb://' + process.env.csiDBUser + ':' + process.env.csiDBPassword + '@ds011374.mlab.com:11374/classsignin',
     MongoDBStore = require('connect-mongodb-session')(session),
     mongo = require('mongodb');
     store = new MongoDBStore({
@@ -35,7 +36,7 @@ app.use(cookieParser());
 
 //static file usage
 app.use('/', express.static(path.join(__dirname, '/')));
-
+/*
 //header options
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "localhost:8005");
@@ -43,7 +44,7 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "format, Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-
+*/
 
 // Set up an Express session, which is required for CASAuthentication.
 app.use(session({
@@ -60,7 +61,7 @@ app.use(session({
 // Create a new instance of CASAuthentication.
 var cas = new CASAuthentication({
     cas_url: 'https://cas-auth.rpi.edu/cas',
-    service_url: 'http://localhost:' + port,
+    service_url: process.env.herokuurl || 'http://localhost:' + port,
     cas_version: '2.0'
 });
 
