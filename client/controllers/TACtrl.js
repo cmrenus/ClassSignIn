@@ -149,7 +149,7 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
     }
   };
 
-  $scope.editAttendance = function(rcs, date, present, classID){
+  $scope.editAttendance = function(rcs, date, present, classID, button){
     console.log(classID, present);
     var text = "present";
     if(present){
@@ -159,11 +159,28 @@ controller('TACtrl', ['$scope', 'adminService', function($scope, adminService){
       title: "Are you sure?",
       text: "Change "+ rcs +"'s attendance for " + date + " to " + text + "?",
       type: 'warning',
-      showCancelButton: true
+      showCancelButton: true,
+      closeOnConfirm: false
     },
     function(){
       adminService.editAttendance(rcs, date, classID, present).then(function(res){
         swal("Edited!", "Attendance was changed", "success");
+        if(button == 'date'){
+          for(x in $scope.classList){
+            if($scope.classList[x].rcs == rcs){
+              $scope.classList[x].present = !present;
+              break;
+            }
+          }
+        }
+        else{
+          for(x in $scope.dates){
+            if($scope.dates[x].date == date){
+              $scope.dates[x].present = !present;
+              break;
+            }
+          }
+        }
       },
       function(err){
         swal("Oops..", "Attendance could not be changed", "error");
