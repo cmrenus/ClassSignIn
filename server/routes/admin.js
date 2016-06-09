@@ -39,6 +39,15 @@ router.get('/currentSemester', function(req, res){
 	});
 });
 
+//get all details for a class
+router.get('/classInfo', function(req, res){
+	var collection = db.get().collection('Classes');
+	collection.find({'_id': new mongo.ObjectId(req.query.classID)}).toArray(function(err, docs){
+		if(err) res.status(503).send('Something went wrong');
+		else res.send(docs[0]);
+	});
+});
+
 //middleware to allow only admin the rest of requests in this file
 router.use('*', function(req, res, next){
 	if((req.session == undefined || req.session.cas_user == undefined) || (req.session.cas_user != req.cookies.user && req.cookies.type != 'admin')){
@@ -154,14 +163,7 @@ router.get("/semesters", function(req, res){
 	});
 });
 
-//get all details for a class
-router.get('/classInfo', function(req, res){
-	var collection = db.get().collection('Classes');
-	collection.find({'_id': new mongo.ObjectId(req.query.classID)}).toArray(function(err, docs){
-		if(err) res.status(503).send('Something went wrong');
-		else res.send(docs[0]);
-	});
-});
+
 
 //delete a student from a specific class
 router.delete('/deleteStudent', function(req, res){
